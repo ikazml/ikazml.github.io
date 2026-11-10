@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digitalization Dept – Budget &amp; KPI Dashboard</title>
+<style>
+:root{--bg:#eef8fb;--cd:#ffffff;--tx:#0f1f2a;--mu:#52646f;--bd:#cfe6ee;--ac:#16a34a;--ok:#16a34a;--wr:#2563eb;--er:#ea580c;--c1:#22c55e;--c2:#3b82f6;--c3:#f97316;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1620;--cd:#112331;--tx:#eaf4f8;--mu:#97b0bf;--bd:#23415a;--ac:#16a34a;--ok:#4ade80;--wr:#60a5fa;--er:#fb923c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1620;--cd:#112331;--tx:#eaf4f8;--mu:#97b0bf;--bd:#23415a;--ac:#16a34a;--ok:#4ade80;--wr:#60a5fa;--er:#fb923c;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px 20px;background:linear-gradient(100deg,#15803d,#0ea5e9 60%,#2563eb);color:#fff;border-bottom:3px solid #f97316}
+h1{font-size:17px;margin:0;flex:1 1 220px}h1 small{display:block;font-weight:500;color:#ffffffd9;font-size:12px}header .k{color:#fff}
+h2{font-size:14px;margin:0 0 10px}
+input,select,button{font:inherit;color:var(--tx);background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--ac)}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+button.x{padding:2px 8px;font-size:12px}
+nav{display:flex;gap:4px;padding:10px 20px 0;overflow-x:auto}nav button{--t:var(--ac);border:1px solid color-mix(in srgb,var(--t) 40%,transparent);border-bottom:0;border-top:4px solid var(--t);border-radius:8px 8px 0 0;background:color-mix(in srgb,var(--t) 16%,transparent);color:var(--tx);padding:8px 16px;white-space:nowrap}
+nav [data-v=overview]{--t:#0d9488}nav [data-v=capex]{--t:#16a34a}nav [data-v=mpoa]{--t:#2563eb}nav [data-v=opex]{--t:#ea580c}nav [data-v=proj]{--t:#0891b2}nav [data-v=task]{--t:#0284c7}nav [data-v=kpi]{--t:#4d7c0f}nav [data-v=db]{--t:#64748b}nav [data-v=usr]{--t:#7c3aed}nav [data-v=rep]{--t:#0d9488}
+nav button.on{background:var(--t);color:#fff;font-weight:700;border-color:var(--t)}
+main{padding:16px 20px 40px;max-width:1280px;margin:0 auto}
+.g{display:grid;gap:12px;margin-bottom:14px}.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.c{background:color-mix(in srgb,#38bdf8 18%,var(--cd));border:1px solid color-mix(in srgb,#38bdf8 45%,transparent);border-top:4px solid #06b6d4;border-radius:12px;padding:14px;min-width:0;box-shadow:0 2px 8px #0ea5e92e}
+.k{font-size:12px;color:var(--mu)}.v{font-size:24px;font-weight:750;margin:2px 0;color:var(--ac)}
+.ch{position:relative;height:260px}
+.bar{height:6px;background:var(--bd);border-radius:4px;overflow:hidden;min-width:70px}.bar i{display:block;height:100%;border-radius:4px}
+.tb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}.tb h2{margin:0;flex:1 1 auto}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;color:var(--mu);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--bd);white-space:nowrap}td{padding:6px 8px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.n{text-align:right;font-variant-numeric:tabular-nums}.bd{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;border:1px solid currentColor;white-space:nowrap}
+.ac{color:var(--ac)}.ok{color:var(--ok)}.wr{color:var(--wr)}.er{color:var(--er)}.mu{color:var(--mu)}
+footer{text-align:center;color:var(--mu);font-size:12px;padding:14px 20px 24px;border-top:1px solid var(--bd)}
+#md{position:fixed;inset:0;background:#0007;display:none;align-items:center;justify-content:center;z-index:9;padding:16px}
+#md form{background:var(--cd);border-radius:12px;padding:18px;width:100%;max-width:440px;max-height:90vh;overflow:auto;display:grid;gap:10px}
+#md label{display:grid;gap:3px;font-size:12px;color:var(--mu)}#md input,#md select{width:100%}
+@media print{header,nav,footer,.np,#md{display:none!important}:root,:root[data-theme]{--bg:#fff;--cd:#fff;--tx:#111;--mu:#444;--bd:#ccc}body{background:#fff}.c{box-shadow:none!important;break-inside:avoid}}
+.seg{margin-bottom:28px;scroll-margin-top:56px}.sh{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding:9px 14px;margin-bottom:12px;border-radius:10px;background:var(--sg);color:#fff}.sh h2{margin:0;font-size:15px;color:#fff}.sh .k{color:#ffffffd9}
+#lg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:30;padding:16px;background:linear-gradient(135deg,#15803d,#0ea5e9 60%,#2563eb)}
+.lgc{background:var(--cd);color:var(--tx);border-radius:14px;padding:24px;width:100%;max-width:380px;display:grid;gap:12px;box-shadow:0 10px 30px #0004}.lgc label{display:grid;gap:4px;font-size:12px;color:var(--mu)}.lgc input{width:100%}
+body.ro [data-a="add"],body.ro [data-a="edit"],body.ro [data-a="del"],body.ro #imp,body.ro #rst,body.ro #ny{display:none!important}body.ro input[data-pr]{pointer-events:none;opacity:.6}
+body.locked header,body.locked nav,body.locked main,body.locked footer{display:none}
+@media print{#lg{display:none!important}}
+</style></head><body>
+<header><h1>Digitalization Dept<small>Interactive Dashboard</small></h1>
+<input id="q" type="search" placeholder="Search everything…" style="flex:1 1 200px;max-width:320px">
+
+<label class="k" title="Used to convert USD transactions to RM">USD→RM <input id="rate" type="number" step="0.01" min="0" style="width:70px"></label>
+<label class="k">Year <select id="yr"></select></label><button id="ny">+ New year</button><button id="imp">Import</button><button id="exp" class="p">Export Excel</button><button id="rst">Reset</button><button id="th" title="Switch between light and dark mode"></button><span id="who" class="k"></span><button id="cp">Change password</button><button id="so">Sign out</button><span id="lu" class="k" title="Most recent save of any record"></span>
+<input id="fi" type="file" accept=".xlsx,.xls,.json" hidden></header>
+<nav id="nav"></nav><main id="main"></main><footer>© 2026 Digitalization Dept. All rights reserved.</footer><div id="md"><form id="fm"></form></div><div id="lg"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script>
+const SEED={"rate":4.2,"depts":["Digitalization","Finance","Procurement","NIO","NSP","NFP","NDPM","NSFO","HCM","Sales","Pre-Sales","BSM","Legal","Quality Mgmt","CEO Office"],"deptV":2,"tasks":[],"proj":[{"id":"p1","name":"Krassol Customization & Enhancement (BSM)","type":"Capex","owner":"","priority":"Medium","status":"Not started","start":"","due":"","progress":0,"code":"SS001/25","notes":"Seeded from Capex list. Update status."},{"id":"p2","name":"NRIS replacement system (NMCH)","type":"Capex","owner":"","priority":"Medium","status":"Not started","start":"","due":"","progress":0,"code":"SS002/25","notes":"Seeded from Capex list. Update status."},{"id":"p3","name":"NOKIA SDN Integration (NSP)","type":"Capex","owner":"","priority":"Medium","status":"Not started","start":"","due":"","progress":0,"code":"SS003/25","notes":"Seeded from Capex list. Update status."},{"id":"p4","name":"Visitor webportal (NIP)","type":"Capex","owner":"","priority":"Low","status":"Not started","start":"","due":"","progress":0,"code":"SS004/25","notes":"Seeded from Capex list. Update status."},{"id":"p5","name":"Electronic key mgt system","type":"Capex","owner":"","priority":"Medium","status":"Not started","start":"","due":"","progress":0,"code":"SS006/25","notes":"Seeded from Capex list. Update status."}],"capex":{"lines":[{"id":"s001","code":"SS001/25","name":"Krassol Customization & Enhancement (BSM)","budget":150000},{"id":"s002","code":"SS002/25","name":"NRIS replacement system (NMCH)","budget":250000},{"id":"s003","code":"SS003/25","name":"NOKIA SDN Integration (NSP)","budget":120000},{"id":"s004","code":"SS004/25","name":"Visitor webportal (NIP)","budget":0},{"id":"s005","code":"SS005/25","name":"Other Digitalization initiatives (IT)","budget":45000},{"id":"s006","code":"SS006/25","name":"Electronic key mgt system","budget":60000}],"tx":[]},"mpoa":{"lines":[{"id":"s007","code":"OAIT001/25","name":"Computer/laptop replacement program (IT)","budget":80000},{"id":"s008","code":"OAIT002/25","name":"Computer/laptop for new staff (IT)","budget":30000},{"id":"s009","code":"OAIT003/25","name":"NMS Backup Servers -Disaster Recovery (NMCH)","budget":200000},{"id":"s010","code":"OAIT004/25","name":"CCTV for sites (IT)","budget":80000},{"id":"s011","code":"OAIT005/25","name":"Head-phone for Exec (IT)","budget":0},{"id":"s012","code":"OAIT006/25","name":"Other IT facilities (IT)","budget":72500}],"tx":[{"id":"s013","date":"2025-03-25","code":"OAIT002/25","desc":"New laptop for CFO","amount":8060,"cur":"MYR","po":"2025-06-16","gr":"","vendor":"Ezytronics","remarks":""}]},"opex":{"lines":[{"id":"s014","code":"COM-001","name":"Anti-Spam Renewal","budget":60000},{"id":"s015","code":"COM-002","name":"Antivirus/XDR renewal","budget":75000},{"id":"s016","code":"COM-003","name":"Firewall Renewal","budget":50000},{"id":"s017","code":"COM-004","name":"Secure VPN Renewal","budget":60000},{"id":"s018","code":"COM-005","name":"Other IT Hardware maintenance","budget":60000},{"id":"s019","code":"COM-006","name":"AWS Cloud consumption charges","budget":660000},{"id":"s020","code":"COM-007","name":"AWS Cloud managed support","budget":72000},{"id":"s021","code":"COM-008","name":"Microsoft Office365 support","budget":50000},{"id":"s022","code":"SYS-01","name":"SAP user license","budget":420000},{"id":"s023","code":"SYS-02","name":"Krassol System Maintenance Renewal","budget":200000},{"id":"s024","code":"SYS-03","name":"AutoCAD LT License Renewal","budget":10000},{"id":"s025","code":"SYS-04","name":"CMS maintenance support","budget":60000},{"id":"s026","code":"SYS-05","name":"Microsoft Office365 renewal","budget":150000},{"id":"s027","code":"SYS-06","name":"HR SSO Subscription License","budget":72000},{"id":"s028","code":"SYS-07","name":"Adobe Acrobat Pro renewal","budget":20000},{"id":"s029","code":"SYS-08","name":"Time Attendance System renewal","budget":30000},{"id":"s030","code":"SYS-09","name":"Project Mgmt App renewal","budget":20000},{"id":"s031","code":"SYS-10","name":"CRM App renewal","budget":30000},{"id":"s032","code":"SYS-11","name":"HR CARP maintenance","budget":15000},{"id":"s033","code":"SYS-12","name":"Other software subscriptions","budget":25000},{"id":"s034","code":"SYS-13","name":"Procurehere renewal","budget":155000},{"id":"s035","code":"SYS-14","name":"Digital Document Mgmt system (PROC)","budget":250000},{"id":"s036","code":"DIA","name":"UNIFI/DIA/Leaseline own use","budget":72000}],"tx":[{"id":"s037","date":"2025-02-06","code":"COM-006","desc":"AWS Cloud usage Jan 25","amount":35272.26,"cur":"MYR","po":"2025-03-03","gr":"2025-03-05","vendor":"G-Asiapac","remarks":"Original code COM-006/007"},{"id":"s038","date":"2025-03-07","code":"COM-006","desc":"AWS Cloud usage Feb 25","amount":33546.97,"cur":"MYR","po":"2025-03-10","gr":"2025-03-13","vendor":"G-Asiapac","remarks":"Original code COM-006/007"},{"id":"s039","date":"2025-04-15","code":"COM-006","desc":"AWS Cloud usage Mar 25","amount":36333.44,"cur":"MYR","po":"2025-04-16","gr":"2025-04-18","vendor":"G-Asiapac","remarks":"Original code COM-006/007"},{"id":"s040","date":"2025-01-01","code":"DIA","desc":"SG-GS DIA Jan 25","amount":1800,"cur":"MYR","po":"","gr":"2025-01-07","vendor":"SG.GS","remarks":""},{"id":"s041","date":"2025-03-01","code":"DIA","desc":"SG-GS DIA Feb-Mar 25","amount":700.0,"cur":"USD","po":"2025-03-03","gr":"2025-03-09","vendor":"SG.GS","remarks":"PO USD4200 for Feb25-Jan26"},{"id":"s042","date":"2025-04-01","code":"DIA","desc":"SG-GS DIA Apr 25","amount":350.0,"cur":"USD","po":"","gr":"2025-04-14","vendor":"SG.GS","remarks":""},{"id":"s043","date":"2025-01-01","code":"SYS-09","desc":"Caction implementation","amount":31840.56,"cur":"MYR","po":"2025-01-22","gr":"2025-03-03","vendor":"Caction","remarks":"1st Claim (Prof consultation)"},{"id":"s044","date":"2025-01-28","code":"COM-001","desc":"Fortimail antispam and Fortigate VPN","amount":37076.4,"cur":"MYR","po":"2025-04-08","gr":"2025-05-05","vendor":"Ezytronics","remarks":"Original code COM-001/004"},{"id":"s045","date":"2025-01-28","code":"SYS-12","desc":"Wildcard SSL 3 years","amount":1302.48,"cur":"MYR","po":"2025-04-09","gr":"2025-05-21","vendor":"Ezytronics","remarks":""},{"id":"s046","date":"2025-10-24","code":"OAIT003/24","desc":"CCTV Installation","amount":92115.08,"cur":"MYR","po":"2024-10-24","gr":"2025-02-24","vendor":"Mutiara Fibre","remarks":"MPOA -2024 budget"},{"id":"s047","date":"2025-10-24","code":"","desc":"CCTV Training","amount":1300,"cur":"MYR","po":"2024-10-24","gr":"2025-06-10","vendor":"Mutiara Fibre","remarks":""},{"id":"s048","date":"2025-03-01","code":"SYS-02","desc":"Krassol Maintenance Mar25-Feb26","amount":205660.04,"cur":"MYR","po":"2025-04-17","gr":"2025-04-18","vendor":"Kehzen","remarks":""},{"id":"s049","date":"2025-02-18","code":"SYS-08","desc":"Time attendance renewal","amount":7344,"cur":"MYR","po":"2025-04-23","gr":"2025-05-02","vendor":"Info-Tech","remarks":"From10/04/2025 To 09/04/2026"},{"id":"s050","date":"2025-01-24","code":"SYS-01","desc":"SAP Charging Jan25","amount":29568,"cur":"MYR","po":"","gr":"","vendor":"TM Tech","remarks":"Inter-co Opex transfer"},{"id":"s051","date":"2025-02-23","code":"SYS-01","desc":"SAP Charging Feb25","amount":32472,"cur":"MYR","po":"","gr":"","vendor":"TM Tech","remarks":"Inter-co Opex transfer"},{"id":"s052","date":"2025-03-23","code":"SYS-01","desc":"SAP Charging Mar25","amount":33264,"cur":"MYR","po":"","gr":"","vendor":"TM Tech","remarks":"Inter-co Opex transfer"},{"id":"s053","date":"2025-04-23","code":"SYS-01","desc":"SAP Charging Apr25","amount":31856,"cur":"MYR","po":"","gr":"","vendor":"TM Tech","remarks":"Inter-co Opex transfer"},{"id":"s054","date":"2025-05-07","code":"DIA","desc":"SG-GS DIA May 25","amount":350.0,"cur":"USD","po":"","gr":"2025-05-07","vendor":"SG.GS","remarks":""},{"id":"s055","date":"2025-05-09","code":"COM-006","desc":"AWS Cloud usage Apr 25","amount":33240.12,"cur":"MYR","po":"2025-05-14","gr":"2025-05-15","vendor":"G-Asiapac","remarks":"Original code COM-006/007"},{"id":"s056","date":"2025-05-26","code":"SYS-01","desc":"SAP Charging May25","amount":31856,"cur":"MYR","po":"","gr":"","vendor":"TM Tech","remarks":"Inter-co Opex transfer"},{"id":"s057","date":"2025-06-14","code":"COM-006","desc":"AWS Cloud usage May 25","amount":30498.71,"cur":"MYR","po":"2025-05-14","gr":"2025-06-16","vendor":"G-Asiapac","remarks":"Original code COM-006/007"},{"id":"s058","date":"2025-06-26","code":"SYS-01","desc":"SAP Charging Jun25","amount":32516,"cur":"MYR","po":"2025-06-26","gr":"2025-06-26","vendor":"TM Tech","remarks":"Inter-co Opex transfer"},{"id":"s059","date":"2025-06-01","code":"DIA","desc":"SG-GS DIA Jun 25","amount":350.0,"cur":"USD","po":"","gr":"2025-06-03","vendor":"SG.GS","remarks":""},{"id":"s060","date":"2025-07-01","code":"DIA","desc":"SG-GS DIA Jul 25","amount":350.0,"cur":"USD","po":"","gr":"2025-07-03","vendor":"SG.GS","remarks":""},{"id":"s061","date":"2025-07-03","code":"COM-005","desc":"Repair printer Mentakab","amount":505,"cur":"MYR","po":"","gr":"2025-07-03","vendor":"Ezytronics","remarks":""},{"id":"s062","date":"2025-07-25","code":"SYS-01","desc":"SAP Charging Jul25","amount":32560,"cur":"MYR","po":"2025-07-25","gr":"2025-07-25","vendor":"TM Tech","remarks":"Inter-co Opex transfer"},{"id":"s063","date":"2025-07-11","code":"COM-006","desc":"AWS Cloud usage Jun 25","amount":28777.15,"cur":"MYR","po":"2025-07-21","gr":"2025-07-24","vendor":"G-Asiapac","remarks":"Original code COM-006/007"},{"id":"s064","date":"2025-06-27","code":"COM-002","desc":"Malwarebytes -3 years renewal","amount":43331.4,"cur":"MYR","po":"","gr":"","vendor":"Ezytronics","remarks":""}]},"kpi":[{"id":"s065","perspective":"People","kpi":"Ensure 3x/annum effective Individual Performance Conversation","unit":"count","target":3,"actual":"","weight":10,"dir":"hi"},{"id":"s066","perspective":"People","kpi":"Complete 10 E-learning topics through TM LinkedIn Learning","unit":"topics","target":10,"actual":"","weight":5,"dir":"hi"},{"id":"s067","perspective":"Customer","kpi":"Fiberail rNPS target","unit":"score","target":53,"actual":"","weight":5,"dir":"hi"},{"id":"s068","perspective":"Business","kpi":"Fiberail EBIT target","unit":"RM Mil","target":34.1,"actual":"","weight":5,"dir":"hi"},{"id":"s069","perspective":"Business","kpi":"Fiberail Operating Revenue","unit":"RM Mil","target":178.7,"actual":"","weight":5,"dir":"hi"},{"id":"s070","perspective":"Business","kpi":"Service Availability for AWS Cloud services","unit":"%","target":99.95,"actual":"","weight":10,"dir":"hi"},{"id":"s071","perspective":"Business","kpi":"Service Availability for LAN & WAN","unit":"%","target":99.95,"actual":"","weight":10,"dir":"hi"},{"id":"s072","perspective":"Business","kpi":"Resolve IT issue/complaint","unit":"hours","target":3,"actual":"","weight":10,"dir":"lo"},{"id":"s073","perspective":"Business","kpi":"Compliance to the TM Cyber Security Directive","unit":"%","target":100,"actual":"","weight":10,"dir":"hi"},{"id":"s074","perspective":"Business","kpi":"Completion of 2nd Phase of CMS System","unit":"%","target":100,"actual":"","weight":10,"dir":"hi"},{"id":"s075","perspective":"Business","kpi":"Completion of Wifi implementation for selected OCs","unit":"%","target":100,"actual":"","weight":10,"dir":"hi"},{"id":"s076","perspective":"Business","kpi":"Completion of project management app for NDPM","unit":"%","target":100,"actual":"","weight":10,"dir":"hi"},{"id":"s077","perspective":"User Satisfaction","kpi":"CMS User Satisfaction Index","unit":"index","target":80,"actual":"","weight":0,"dir":"hi"},{"id":"s078","perspective":"User Satisfaction","kpi":"IT Services User Satisfaction Index","unit":"index","target":80,"actual":"","weight":0,"dir":"hi"}]};
+const CN={capex:['Capex','Warranted','var(--c1)','#22c55e'],mpoa:['MPOA','Warranted','var(--c2)','#3b82f6'],opex:['Opex','Budgeted','var(--c3)','#f97316']};
+const CATS=Object.keys(CN),KEY='digi-dash-v1',PERS=['People','Customer','Business','User Satisfaction'];
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let UN=0;const clone=o=>JSON.parse(JSON.stringify(o)),uid=()=>Date.now().toString(36)+(UN++).toString(36)+Math.random().toString(36).slice(2,5);
+const YK=['capex','mpoa','opex','kpi','proj','tasks'];
+const emptyYear=()=>({capex:{lines:[],tx:[]},mpoa:{lines:[],tx:[]},opex:{lines:[],tx:[]},kpi:[],proj:[],tasks:[]});
+const stashTo=o=>{o.years=o.years||{};o.years[o.year]=Object.fromEntries(YK.map(k=>[k,o[k]]))};
+const initS=o=>{if(!o.year)o.year='2025';if(!o.years)stashTo(o);else{o.years[o.year]=o.years[o.year]||emptyYear();YK.forEach(k=>{o[k]=o.years[o.year][k]})}};
+const rm=n=>'RM '+Math.round(n).toLocaleString('en-MY'),pc=n=>(n*100).toFixed(1)+'%';
+const stamp=()=>new Date().toISOString(),fu=s=>{const d=s?new Date(s):null;return d&&!isNaN(d)?`<span title="${fmtDT(d)}">${fmtD(d)}</span>`:'<span class="mu">–</span>'};
+let S,view='overview',F={},CH={};
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S)S=clone(SEED);
+initS(S);
+if(!S.proj)S.proj=clone(SEED.proj);
+if(!S.tasks)S.tasks=[];
+if(!S.depts)S.depts=clone(SEED.depts);
+if(S.deptV!==2){S.depts=S.depts.filter(d=>!['HR','Operations','Operation','Network','Security'].includes(d));['NIO','NSP','NFP','NDPM','NSFO','HCM','Sales','Pre-Sales','BSM','Legal','Quality Mgmt','CEO Office'].forEach(d=>{if(!S.depts.includes(d))S.depts.push(d)});S.deptV=2}
+S.proj=S.proj.filter(p=>{if(['Task','Assignment'].includes(p.type)){S.tasks.push(p);return false}if(p.type==='Project')p.type='Capex';return true});
+S.tasks.forEach(k=>{if(k.type==='Action item')k.type='Action Item'});
+const persist=()=>{try{const o={...S};YK.forEach(k=>delete o[k]);localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
+const save=()=>{S.lastSaved=stamp();stashTo(S);persist()};
+const yrs=()=>{stashTo(S);return Object.keys(S.years).sort()};
+const ctot=(d,c)=>{const L=d[c].lines,b=L.reduce((s,l)=>s+(+l.budget||0),0),a=d[c].tx.filter(x=>L.some(l=>l.code===x.code)).reduce((s,x)=>s+myr(x),0);return{b,a,u:b?a/b:0}};
+function yoyTable(){const Y=yrs(),T=Y.map(y=>CATS.map(c=>ctot(S.years[y],c))),sb=i=>T[i].reduce((s,x)=>s+x.b,0);
+ const rows=Y.map((y,i)=>{const b=sb(i),a=T[i].reduce((s,x)=>s+x.a,0),pb=i?sb(i-1):0,ch=pb?(b-pb)/pb*100:null;
+  return `<tr><td><b>${y}</b></td>${T[i].map(x=>`<td class="n">${rm(x.b)}<div class="k">${rm(x.a)} actual · ${pc(x.u)}</div></td>`).join('')}<td class="n">${rm(b)}</td><td class="n">${rm(a)}</td><td class="n">${b?pc(a/b):'–'}</td><td class="n">${ch==null?'<span class="mu">–</span>':(ch>=0?'+':'')+ch.toFixed(1)+'%'}</td></tr>`}).join('');
+ return `<div class="c"><h2>Year-on-year summary</h2><div class="tw"><table><thead><tr><th>Year</th>${CATS.map(c=>`<th class="n">${CN[c][0]} budget</th>`).join('')}<th class="n">Total budget</th><th class="n">Total actual</th><th class="n">Utilisation</th><th class="n">Budget change vs previous year</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
+function catYoy(c){const Y=yrs(),codes=[];Y.forEach(y=>S.years[y][c].lines.forEach(l=>{if(!codes.includes(l.code))codes.push(l.code)}));
+ const nm=code=>{for(const y of [...Y].reverse()){const l=S.years[y][c].lines.find(x=>x.code===code);if(l)return l.name}return ''};
+ const cell=(y,code)=>{const d=S.years[y][c],l=d.lines.find(x=>x.code===code);return l?{b:+l.budget||0,a:d.tx.filter(x=>x.code===code).reduce((s,x)=>s+myr(x),0)}:null};
+ const rows=codes.map(code=>{const cs=Y.map(y=>cell(y,code)),last=cs[cs.length-1],prev=cs[cs.length-2],ch=last&&prev&&prev.b?(last.b-prev.b)/prev.b*100:null;
+  return `<tr><td>${esc(code)}</td><td>${esc(nm(code))}</td>${cs.map(x=>x?`<td class="n">${rm(x.b)}<div class="k">${rm(x.a)} actual</div></td>`:'<td class="n mu">–</td>').join('')}<td class="n">${ch==null?'<span class="mu">–</span>':(ch>=0?'+':'')+ch.toFixed(1)+'%'}</td></tr>`}).join('');
+ return `<div class="c" style="margin-top:14px"><h2>${CN[c][0]}: year-on-year comparison</h2><div class="ch"><canvas id="cy"></canvas></div><h2 style="margin:14px 0 8px">Budget by line across years</h2><div class="tw"><table><thead><tr><th>Code</th><th>Description</th>${Y.map(y=>`<th class="n">${y}</th>`).join('')}<th class="n">Budget change (latest vs previous)</th></tr></thead><tbody>${rows||`<tr><td colspan="${Y.length+3}" class="mu">No lines.</td></tr>`}</tbody></table></div></div>`}
+const DBT=[...CATS.flatMap(c=>[[c+'|lines',CN[c][0]+' budget lines'],[c+'|tx',CN[c][0]+' transactions']]),['kpi','KPIs'],['proj','Projects'],['tasks','Tasks']];
+const dbRows=(k,y)=>{const[a,b]=k.split('|'),d=S.years[y];return(b?d[a][b]:d[a]).map(r=>({year:y,...r}))};
+const schema=k=>{const[a,b]=k.split('|'),f=b==='lines'?FLD.line.map(x=>x[0]).concat(HD.includes(a)?['dept']:[]):b==='tx'?FLD.tx.map(x=>x[0]):a==='kpi'?FLD.kpi.map(x=>x[0]):a==='proj'?FLD.proj.map(x=>x[0]):FLD.task.map(x=>x[0]);return['id','year',...f,'updated']};
+function dbView(){stashTo(S);const Y=Object.keys(S.years).sort(),T=F.dt||DBT[0][0],YY=F.dy||'',cnt=DBT.map(([k])=>Y.reduce((s,y)=>s+dbRows(k,y).length,0));
+ let sz=0;try{sz=(localStorage.getItem(KEY)||'').length}catch(e){}
+ const all=(YY?[YY]:Y).flatMap(y=>dbRows(T,y)).filter(hit),cols=schema(T),shown=all.slice(0,300);
+ return `<div class="g g4">${kp('Storage','Browser local storage','<div class="k">Key: '+KEY+' · private to this browser</div>')}${kp('Stored size',(sz/1024).toFixed(1)+' KB')}${kp('Years stored',Y.join(', '))}${kp('Total records',cnt.reduce((a,b)=>a+b,0))}</div>
+ <div class="c" style="margin-bottom:14px"><div class="tb"><h2>Tables &amp; schema</h2><button id="dbj" class="p">Download full database (JSON)</button></div><div class="tw"><table><thead><tr><th>Table</th><th class="n">Records</th><th>Fields</th></tr></thead><tbody>${DBT.map(([k,n],i)=>`<tr><td>${n}</td><td class="n">${cnt[i]}</td><td class="k">${schema(k).join(', ')}</td></tr>`).join('')}</tbody></table></div></div>
+ <div class="c" style="margin-bottom:14px"><h2>Shared lists &amp; settings</h2><div class="k">USD→RM rate: <b>${S.rate}</b></div><div class="k">Departments (${S.depts.length}): ${esc(S.depts.join(', '))}</div><div class="k">Vendors (${vlist().length}): ${esc(vlist().join(', '))}</div><div class="k">Owners / assignees (${olist().length}): ${esc(olist().join(', '))}</div></div>
+ <div class="c"><div class="tb"><h2>Browse records (read-only)</h2><select data-f="dt">${DBT.map(([k,n])=>`<option value="${k}" ${T===k?'selected':''}>${n}</option>`).join('')}</select>${sel('dy',Y,'All years')}</div>
+ <div class="k" style="margin-bottom:8px">${all.length} record(s)${all.length>shown.length?' · showing first '+shown.length:''}. Edit records from their own tabs.</div>
+ <div class="tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${shown.length?shown.map(r=>`<tr>${cols.map(c=>`<td>${esc(['date','po','gr','start','due'].includes(c)?fmtD(r[c]):c==='updated'?fmtDT(r[c]):r[c])}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}" class="mu">No records.</td></tr>`}</tbody></table></div></div>`}
+async function dlDb(){stashTo(S);const o={...S};YK.forEach(k=>delete o[k]);const data=JSON.stringify(o,null,1),fn='Digitalization_Database_'+new Date().toISOString().slice(0,10)+'.json';
+ try{const d=await claude.use('downloads');if(d)return await d.save({filename:fn,data})}catch(e){if(e&&e.code==='declined')return}
+ try{const b=new Blob([data],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove()}catch(e){tell('Download is not available in this view.')}}
+const REP=[['util','Budget utilisation summary','Capex, MPOA and Opex budget against actual spend'],['watch','Over-budget & watchlist','Budget lines that are over budget or at 80% or more of budget'],['vendor','Spend by vendor','Spend per vendor across Capex, MPOA and Opex transactions'],['dept','Budget by requested department','Capex, MPOA and Opex budget grouped by requesting department'],['month','Monthly spend trend','Transaction value per month by category'],['kpi','KPI scorecard','Departmental KPI targets, achievements and weighted score'],['work','Projects & tasks status','Open projects, tasks, assignments and action items']];
+const SC={'Over budget':'er','Near limit':'wr','Within budget':'ok','No spend':'mu','Achieved':'ok','On track':'wr','At risk':'er','Not reported':'mu','Overdue':'er','Completed':'ok','In progress':'ac','On hold':'wr','Not started':'mu','Cancelled':'mu'};
+const sm=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+const rtbl=(h,r,num,empty)=>`<div class="tw"><table><thead><tr>${h.map((x,i)=>`<th class="${num.includes(i)?'n':''}">${x}</th>`).join('')}</tr></thead><tbody>${r.length?r.map(row=>`<tr>${row.map((v,i)=>`<td class="${num.includes(i)?'n':''}">${SC[v]?`<span class="bd ${SC[v]}">${v}</span>`:esc(v)}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${h.length}" class="mu">${empty||'No data.'}</td></tr>`}</tbody></table></div>`;
+function repBuild(k){
+ const lines=()=>CATS.flatMap(c=>S[c].lines.map(l=>({c,...l,a:act(c,l.code)})));
+ if(k==='util'){const T=CATS.map(tot),B=sm(T,x=>x.b),A=sm(T,x=>x.a);
+  return{cards:[['Total budget',rm(B)],['Total actual',rm(A)],['Remaining',rm(B-A)],['Utilisation',pc(B?A/B:0)]],
+  chart:{type:'bar',data:{labels:CATS.map(c=>CN[c][0]),datasets:[{label:'Budget',data:T.map(x=>x.b),backgroundColor:'#b6c5d1'},{label:'Actual',data:T.map(x=>x.a),backgroundColor:CATS.map(c=>CN[c][3])}]},options:{scales:{y:ax()}}},
+  h:['Category','Budget (RM)','Actual (RM)','Remaining (RM)','Utilisation','Status','Budget lines'],num:[1,2,3,4,6],
+  r:[...CATS.map((c,i)=>[CN[c][0],rm(T[i].b),rm(T[i].a),rm(T[i].r),pc(T[i].u),stat(T[i].a,T[i].b)[0],S[c].lines.length]),['Total',rm(B),rm(A),rm(B-A),pc(B?A/B:0),stat(A,B)[0],sm(CATS,c=>S[c].lines.length)]],
+  note:'Actual is the sum of transactions whose code matches a budget line. Unallocated transactions are excluded.'}}
+ if(k==='watch'){const L=lines().map(l=>({...l,u:l.budget?l.a/l.budget:(l.a?9:0)})),f=L.filter(l=>l.a>0&&l.a>=.8*l.budget).sort((x,y)=>y.u-x.u);
+  return{cards:[['Over budget',L.filter(l=>l.a>l.budget).length],['Near limit (80% or more)',L.filter(l=>l.a>0&&l.a>=.8*l.budget&&l.a<=l.budget).length],['Lines with no spend',L.filter(l=>!l.a&&l.budget>0).length],['Budget lines',L.length]],
+  chart:f.length?{type:'bar',data:{labels:f.slice(0,10).map(l=>l.code),datasets:[{label:'Used %',data:f.slice(0,10).map(l=>+(l.u*100).toFixed(1)),backgroundColor:'#f97316'}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}}:null,
+  h:['Category','Code','Description','Budget (RM)','Actual (RM)','Remaining (RM)','Used','Status'],num:[3,4,5,6],
+  r:f.map(l=>[CN[l.c][0],l.code,l.name,rm(l.budget),rm(l.a),rm(l.budget-l.a),pc(l.u),stat(l.a,l.budget)[0]]),empty:'No budget lines are over budget or near their limit.'}}
+ if(k==='vendor'){const m={};CATS.forEach(c=>S[c].tx.forEach(x=>{const v=x.vendor||'(No vendor)',o=m[v]=m[v]||{Capex:0,MPOA:0,Opex:0,n:0};o[CN[c][0]]+=myr(x);o.n++}));
+  const R=Object.entries(m).map(([v,o])=>({v,...o,t:o.Capex+o.MPOA+o.Opex})).sort((a,b)=>b.t-a.t),G=sm(R,x=>x.t);
+  return{cards:[['Vendors',R.length],['Total spend',rm(G)],['Largest vendor',R[0]?R[0].v:'–'],['Transactions',sm(R,x=>x.n)]],
+  chart:R.length?{type:'bar',data:{labels:R.slice(0,10).map(x=>x.v.slice(0,28)),datasets:[{label:'Spend',data:R.slice(0,10).map(x=>x.t),backgroundColor:'#22c55e'}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:ax()}}}:null,
+  h:['Vendor','Capex (RM)','MPOA (RM)','Opex (RM)','Total (RM)','Share','Transactions'],num:[1,2,3,4,5,6],
+  r:R.map(x=>[x.v,rm(x.Capex),rm(x.MPOA),rm(x.Opex),rm(x.t),G?pc(x.t/G):'–',x.n]),empty:'No transactions yet.',note:'Includes all transactions, also those not matched to a budget line. Set the vendor in each transaction to improve this report.'}}
+ if(k==='dept'){const m={};CATS.forEach(c=>S[c].lines.forEach(l=>{const d=l.dept||'(Unassigned)',o=m[d]=m[d]||{Capex:0,MPOA:0,Opex:0,a:0,n:0};o[CN[c][0]]+=+l.budget||0;o.a+=act(c,l.code);o.n++}));
+  const R=Object.entries(m).map(([d,o])=>({d,...o,b:o.Capex+o.MPOA+o.Opex})).sort((x,y)=>y.b-x.b);
+  return{cards:[['Departments with requests',R.filter(x=>x.d!=='(Unassigned)').length],['Total budget',rm(sm(R,x=>x.b))],['Total actual',rm(sm(R,x=>x.a))],['Unassigned lines',(m['(Unassigned)']||{n:0}).n]],
+  chart:R.length?{type:'bar',data:{labels:R.map(x=>x.d),datasets:[{label:'Capex budget',data:R.map(x=>x.Capex),backgroundColor:CN.capex[3]},{label:'MPOA budget',data:R.map(x=>x.MPOA),backgroundColor:CN.mpoa[3]},{label:'Opex budget',data:R.map(x=>x.Opex),backgroundColor:CN.opex[3]}]},options:{scales:{x:{stacked:true},y:{stacked:true,...ax()}}}}:null,
+  h:['Requested dept','Lines','Capex budget (RM)','MPOA budget (RM)','Opex budget (RM)','Total budget (RM)','Actual (RM)','Used'],num:[1,2,3,4,5,6,7],
+  r:R.map(x=>[x.d,x.n,rm(x.Capex),rm(x.MPOA),rm(x.Opex),rm(x.b),rm(x.a),x.b?pc(x.a/x.b):'–']),empty:'No budget lines.',note:'Assign a Requested Dept to each Capex, MPOA and Opex line (Edit) to complete this report.'}}
+ if(k==='month'){const mo=[...new Set(CATS.flatMap(c=>S[c].tx.map(x=>String(x.date||'').slice(0,7))).filter(Boolean))].sort(),v=(c,m)=>sm(S[c].tx.filter(x=>String(x.date||'').slice(0,7)===m),myr);let cum=0;
+  return{cards:[['Months with spend',mo.length],['Total transaction value',rm(sm(CATS,c=>sm(S[c].tx,myr)))],['Peak month',mo.length?fmtM(mo.slice().sort((a,b)=>sm(CATS,c=>v(c,b))-sm(CATS,c=>v(c,a)))[0]):'–'],['Transactions',sm(CATS,c=>S[c].tx.length)]],
+  chart:mo.length?{type:'bar',data:{labels:mo.map(fmtM),datasets:CATS.map(c=>({label:CN[c][0],data:mo.map(m=>v(c,m)),backgroundColor:CN[c][3]}))},options:{scales:{x:{stacked:true},y:{stacked:true,...ax()}}}}:null,
+  h:['Month','Capex (RM)','MPOA (RM)','Opex (RM)','Total (RM)','Cumulative (RM)'],num:[1,2,3,4,5],
+  r:mo.map(m=>{const t=sm(CATS,c=>v(c,m));cum+=t;return[fmtM(m),rm(v('capex',m)),rm(v('mpoa',m)),rm(v('opex',m)),rm(t),rm(cum)]}),empty:'No dated transactions yet.'}}
+ if(k==='kpi'){const K=S.kpi,r=K.filter(x=>ach(x)!=null),sc=sm(r,x=>(+x.weight||0)*Math.min(1,ach(x))),W=sm(K,x=>+x.weight||0),pa=PERS.map(p=>{const q=r.filter(x=>x.perspective===p);return q.length?+(sm(q,x=>Math.min(1,ach(x)))/q.length*100).toFixed(1):null});
+  return{cards:[['Weighted score',sc.toFixed(1)+' / '+W],['KPIs reported',r.length+' / '+K.length],['Achieved',K.filter(x=>kst(ach(x))[0]==='Achieved').length],['At risk',K.filter(x=>kst(ach(x))[0]==='At risk').length]],
+  chart:r.length?{type:'bar',data:{labels:PERS,datasets:[{label:'Average achievement %',data:pa,backgroundColor:'#22c55e'}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0}}}}:null,
+  h:['Perspective','KPI','Target','Actual','Weight %','Achievement','Status'],num:[2,3,4,5],
+  r:[...K].sort((a,b)=>PERS.indexOf(a.perspective)-PERS.indexOf(b.perspective)).map(x=>[x.perspective,x.kpi,x.target+' '+x.unit+(x.dir==='lo'?' (max)':''),x.actual===''?'–':x.actual,x.weight,ach(x)==null?'–':pc(ach(x)),kst(ach(x))[0]]),empty:'No KPIs.',note:r.length?'':'No KPI actuals entered yet. Enter actuals in the KPIs tab to see achievement and score.'}}
+ const I=[...S.proj.map(p=>({...p,k:p.type})),...S.tasks.map(p=>({...p,k:p.type||'Task'}))],op=I.filter(p=>!['Completed','Cancelled'].includes(p.status)).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
+ return{cards:[['Items tracked',I.length],['In progress',I.filter(p=>p.status==='In progress').length],['Completed',I.filter(p=>p.status==='Completed').length],['Overdue',I.filter(od).length]],
+  chart:I.length?{type:'bar',data:{labels:PS,datasets:[{label:'Projects',data:PS.map(s=>S.proj.filter(p=>p.status===s).length),backgroundColor:'#22c55e'},{label:'Tasks',data:PS.map(s=>S.tasks.filter(p=>p.status===s).length),backgroundColor:'#3b82f6'}]},options:{scales:{y:{beginAtZero:true,ticks:{precision:0}}}}}:null,
+  h:['Type','Name','Owner','Priority','Status','Due','Progress','Remarks'],num:[6],
+  r:op.map(p=>[p.k,p.name,p.owner||'–',p.priority,od(p)?'Overdue':p.status,fmtD(p.due)||'–',Math.min(100,+p.progress||0)+'%',p.remarks||'']),empty:'No open projects or tasks.',note:'Open items sorted by due date. Items past their due date are marked Overdue.'}}
+function repView(){const k=F.rp||'util',R=repBuild(k),d=REP.find(x=>x[0]===k);
+ return `<div class="tb np">${REP.map(([id,n])=>`<button class="${k===id?'p':''}" data-rp="${id}">${n}</button>`).join('')}</div>
+ <div class="c"><div class="tb"><div style="flex:1 1 260px"><h2 style="font-size:18px;margin:0">${d[1]} · ${S.year}</h2><div class="k">${d[2]} · Generated ${fmtD(new Date())}</div></div><span class="np"><button id="rpp">Download PDF</button> <button id="rpx" class="p">Export this report</button></span></div>
+ <div class="g g4">${R.cards.map(([a,b])=>kp(a,b)).join('')}</div>${R.chart?'<div class="ch" style="margin-bottom:14px"><canvas id="rc"></canvas></div>':''}${rtbl(R.h,R.r,R.num,R.empty)}${R.note?`<div class="k" style="margin-top:10px">${esc(R.note)}</div>`:''}</div>`}
+function repBind(){const k=F.rp||'util',R=repBuild(k);document.querySelectorAll('[data-rp]').forEach(b=>{b.onclick=()=>{F.rp=b.dataset.rp;render()}});
+ if(R.chart)chart('rc',R.chart);
+ $('#rpp').onclick=async()=>{
+ if(!window.jspdf){tell('The PDF library could not be loaded.');return}
+ const th=document.documentElement.dataset.theme,oa=Chart.defaults.animation;
+ document.documentElement.dataset.theme='light';Chart.defaults.animation=false;render();
+ await new Promise(r=>setTimeout(r,350));
+ const cv=R.chart?document.getElementById('rc'):null,img=cv?cv.toDataURL('image/png'):null,cw0=cv?cv.width:1,ch0=cv?cv.height:1;
+ document.documentElement.dataset.theme=th;Chart.defaults.animation=oa;render();
+ const doc=new window.jspdf.jsPDF({orientation:'landscape',unit:'pt',format:'a4'}),PW=doc.internal.pageSize.getWidth(),PH=doc.internal.pageSize.getHeight(),W=PW-80,d=REP.find(x=>x[0]===k);
+ let y=42;doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(20);doc.text(d[1]+' - '+S.year,40,y);
+ doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(100);y+=15;doc.text(d[2]+'  |  Generated '+fmtD(new Date()),40,y);
+ y+=14;const cw=W/R.cards.length;
+ R.cards.forEach(([a,b],i)=>{const x=40+i*cw;doc.setDrawColor(190);doc.roundedRect(x,y,cw-8,46,4,4);doc.setFontSize(8);doc.setTextColor(100);doc.text(String(a),x+8,y+15);doc.setFontSize(13);doc.setTextColor(20);doc.text(String(b).slice(0,24),x+8,y+36)});
+ y+=62;
+ if(img){const ih=Math.min(230,W*ch0/cw0),iw=Math.min(W,ih*cw0/ch0);doc.addImage(img,'PNG',40,y,iw,ih);y+=ih+14}
+ doc.autoTable({startY:y,head:[R.h],body:R.r.length?R.r.map(r=>r.map(String)):[[R.empty||'No data.']],styles:{fontSize:8,cellPadding:4},headStyles:{fillColor:[21,128,61]},columnStyles:Object.fromEntries(R.num.map(i=>[i,{halign:'right'}])),margin:{left:40,right:40,bottom:40}});
+ if(R.note){let ny=doc.lastAutoTable.finalY+14;if(ny>PH-40){doc.addPage();ny=40}doc.setFontSize(8);doc.setTextColor(100);doc.text(R.note,40,ny,{maxWidth:W})}
+ const n=doc.getNumberOfPages();for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(8);doc.setTextColor(120);doc.text('\u00a9 2026 Digitalization Dept. All rights reserved.   Page '+i+' of '+n,40,PH-20)}
+ const data=doc.output('arraybuffer'),fn='Report_'+k+'_'+S.year+'.pdf';
+ try{const dl=await claude.use('downloads');if(dl)return await dl.save({filename:fn,data})}catch(e){if(e&&e.code==='declined')return}
+ try{doc.save(fn)}catch(e){tell('PDF download is not available in this view.')}};
+ $('#rpx').onclick=async()=>{const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([[REP.find(x=>x[0]===k)[1]+' - '+S.year],[],R.h,...R.r]),'Report');
+  const data=XLSX.write(wb,{type:'array',bookType:'xlsx'}),fn='Report_'+k+'_'+S.year+'.xlsx';
+  try{const d=await claude.use('downloads');if(d)return await d.save({filename:fn,data})}catch(e){if(e&&e.code==='declined')return}
+  try{XLSX.writeFile(wb,fn)}catch(e){tell('Export is not available in this view.')}}}
+const olist=cur=>[...new Set([...(S.owners||[]),...Object.values(S.years||{}).flatMap(d=>[...(d.proj||[]),...(d.tasks||[])].map(x=>x.owner)),...S.proj.map(x=>x.owner),...S.tasks.map(x=>x.owner),cur].map(v=>String(v||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+function svcStrip(){const c=S.kpi.filter(k=>/^Service Availability/i.test(k.kpi));if(!c.length)return '';
+ return `<div class="g g2">${c.map(k=>{const a=ach(k),s=kst(a);return `<div class="c"><div class="k">${esc(k.kpi)}</div><div class="v">${k.actual===''||k.actual==null?'–':esc(k.actual)+' '+esc(k.unit)}</div><div class="k">Target: ${esc(k.target)} ${esc(k.unit)} · <span class="bd ${s[1]}">${s[0]}</span></div><div style="margin-top:8px">${bar(a==null?0:a,`var(--${s[1]==='mu'?'bd':s[1]})`)}</div><div class="k" style="margin-top:6px">${a==null?'No actual entered yet':'Achievement '+pc(a)}</div><button class="x" style="margin-top:8px" data-a="edit" data-e="kpi" data-i="${k.id}">Update actual</button></div>`}).join('')}</div>`}
+const seg=(id,title,sub,col,body)=>`<section class="seg" id="${id}" style="--sg:${col}"><div class="sh"><h2>${title}</h2></div>${body}</section>`;
+const segNav=()=>`<div class="tb np" style="position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0">${[['seg-budget','Budget And Expenses'],['seg-work','Projects & tasks'],['seg-svc','Service availability'],['seg-kpi','KPI performance']].map(([i,n])=>`<button data-jump="${i}">${n}</button>`).join('')}</div>`;
+const kpiExtra=()=>`<div class="g g2"><div class="c"><h2>Achievement by perspective (%)</h2><div class="ch" id="ob"><canvas id="o1"></canvas></div></div><div class="c"><h2>KPI status mix</h2><div class="ch"><canvas id="o2"></canvas></div></div></div>
+ <div class="c" style="margin-bottom:14px"><h2>KPI performance by KPI</h2>${rtbl(['Perspective','KPI','Target','Actual','Weight %','Achievement','Status'],[...S.kpi].sort((a,b)=>PERS.indexOf(a.perspective)-PERS.indexOf(b.perspective)).map(x=>[x.perspective,x.kpi,x.target+' '+x.unit+(x.dir==='lo'?' (max)':''),x.actual===''||x.actual==null?'–':x.actual,x.weight,ach(x)==null?'–':pc(ach(x)),kst(ach(x))[0]]),[2,3,4,5],'No KPIs.')}</div>`;
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],p2=n=>String(n).padStart(2,'0');
+const fmtD=v=>{if(!v)return '';if(v instanceof Date)return isNaN(v)?'':p2(v.getDate())+'/'+MN[v.getMonth()]+'/'+v.getFullYear();const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(v));return m?m[3]+'/'+MN[+m[2]-1]+'/'+m[1]:String(v)};
+const fmtDT=v=>{const d=v instanceof Date?v:new Date(v);return isNaN(d)?'':fmtD(d)+' '+p2(d.getHours())+':'+p2(d.getMinutes())};
+const fmtM=m=>{const x=/^(\d{4})-(\d{2})/.exec(String(m));return x?MN[+x[2]-1]+'/'+x[1]:String(m)};
+const normD=s=>{s=String(s==null?'':s).trim();if(!s)return '';let d,m,y,x;
+ if(x=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s)){y=+x[1];m=+x[2];d=+x[3]}
+ else if(x=/^(\d{1,2})[\/\-. ](\d{1,2}|[A-Za-z]{3,9})[\/\-. ](\d{2}|\d{4})$/.exec(s)){d=+x[1];y=+x[3];m=/^\d+$/.test(x[2])?+x[2]:MN.findIndex(n=>n.toLowerCase()===x[2].slice(0,3).toLowerCase())+1}
+ else if(x=/^(\d{2})(\d{2})(\d{4})$/.exec(s)){d=+x[1];m=+x[2];y=+x[3]}
+ else return null;
+ if(y<100)y+=2000;const dt=new Date(y,m-1,d);if(!m||dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d)return null;return y+'-'+p2(m)+'-'+p2(d)};
+const parseD=s=>{const r=normD(s);return r===null?String(s||'').trim():r};
+document.addEventListener('focusout',ev=>{const el=ev.target;if(el.dataset&&el.dataset.date!==undefined){const v=normD(el.value);if(v===null)el.setCustomValidity('Use DD/MMM/YYYY, for example 03/Nov/2026');else{el.setCustomValidity('');el.value=fmtD(v)}}});
+const toDigits=v=>String(v||'').replace(/[A-Za-z]{3}/g,s=>{const i=MN.findIndex(n=>n.toLowerCase()===s.toLowerCase());return i<0?'':p2(i+1)}).replace(/\D/g,'').slice(0,8);
+const maskD=raw=>{const ds=toDigits(raw);if(!ds)return '';let d,rest;
+ if(+ds[0]>3){d='0'+ds[0];rest=ds.slice(1)}else{d=ds.slice(0,2);rest=ds.slice(2)}
+ let out=d;if(d.length<2)return out;out+='/';if(!rest)return out;
+ let m,r2;if(+rest[0]>1){m='0'+rest[0];r2=rest.slice(1)}else{m=rest.slice(0,2);r2=rest.slice(2)}
+ out+=m.length===2&&+m>=1&&+m<=12?MN[+m-1]:m;if(m.length<2)return out;return out+'/'+r2.slice(0,4)};
+document.addEventListener('focusin',ev=>{const el=ev.target;if(el.dataset&&el.dataset.date!==undefined)el._prev=el.value});
+document.addEventListener('input',ev=>{const el=ev.target;if(!(el.dataset&&el.dataset.date!==undefined))return;el.setCustomValidity('');let v=el.value;const t=(ev.inputType||'');
+ if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(v.trim())||/^\d{1,2}[\/\-. ]\d{1,2}[\/\-. ]\d{4}$/.test(v.trim())){const n=normD(v);if(n){el.value=el._prev=fmtD(n);return}}
+ if(ev.data&&/^[\/\-. ,]$/.test(ev.data)){const pd=toDigits(el._prev||'');v=(pd.length===1||pd.length===3)?pd.slice(0,-1)+'0'+pd.slice(-1):pd}
+ let f=maskD(v);if(t.startsWith('delete')&&f===el._prev)f=maskD(toDigits(f).slice(0,-1));
+ el.value=f;el._prev=f});
+const ask=(msg,okLabel)=>new Promise(res=>{const f=$('#fm');f.innerHTML=`<h2>${esc(msg)}</h2><div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="cn">Cancel</button><button type="button" id="ok" class="p">${okLabel||'OK'}</button></div>`;f.onsubmit=e=>e.preventDefault();$('#md').style.display='flex';$('#cn').onclick=()=>{$('#md').style.display='none';res(false)};$('#ok').onclick=()=>{$('#md').style.display='none';res(true)}});
+const tell=msg=>new Promise(res=>{const f=$('#fm');f.innerHTML=`<h2>${esc(msg)}</h2><div style="display:flex;justify-content:flex-end"><button type="button" id="ok" class="p">OK</button></div>`;f.onsubmit=e=>e.preventDefault();$('#md').style.display='flex';$('#ok').onclick=()=>{$('#md').style.display='none';res(true)}});
+const PATCHES={'it-maint-2026':{year:'2026',cat:'opex',depts:['IT','NMCH'],lines:[["SYS-01","SAP user license",420000,"IT"],["SYS-02","Krassol System Maintenance Renewal",230000,"BSM"],["SYS-03","AutoCAD LT License Renewal",10000,"IT"],["SYS-04","CMS maintenance support",60000,"IT"],["SYS-05","Microsoft Office365 renewal",150000,"IT"],["SYS-06","HR SSO Subscription License",72000,"HCM"],["SYS-07","Adobe Acrobat Pro renewal",40000,"IT"],["SYS-08","Time Attendance System renewal",30000,"HCM"],["SYS-09","CACTION system subscription renewal",50000,"IT"],["SYS-10","HR CARP maintenance",15000,"HCM"],["SYS-11","Procurehere renewal",155000,"Procurement"],["SYS-12","Other software subscriptions",50000,"IT"],["SYS-13","Fillout Subscription",15000,"NIO"],["SYS-14","LexisNexis subscription",20000,"Legal"],["SYS-15","ChatGPT subscription",12000,"BSM"],["SYS-16","Canva.com subscription",1000,"BSM"],["SYS-17","MS Project subscription",40000,"NDPM"],["SYS-18","PRTG upgrade",100000,"NMCH"],["COM-001","Fortigate and Fortimail subscription renewal",75000,"IT"],["COM-002","Malwarebytes subscription renewal",60000,"IT"],["COM-003","Firewall licenses and support renewal",50000,"IT"],["COM-004","Other IT Hardware maintenance",60000,"IT"],["COM-005","AWS Cloud consumption charges and managed support",480000,"IT"],["COM-006","Cybersecurity services subscription",150000,"IT"]]}};
+function applyPatches(o){o.patches=o.patches||[];let hit=false;
+ for(const [id,p] of Object.entries(PATCHES)){if(o.patches.includes(id))continue;
+  const Y=o.years[p.year]=o.years[p.year]||emptyYear(),L=Y[p.cat].lines;
+  p.lines.forEach(([code,name,budget,dept])=>{if(!L.some(l=>l.code===code))L.push({id:uid(),code,name,budget,dept,remarks:'',updated:stamp()})});
+  o.depts=o.depts||[];p.depts.forEach(d=>{if(!o.depts.includes(d))o.depts.push(d)});
+  o.patches.push(id);hit=true}
+ return hit}
+const AUTH={admin:'zaki@fiberail.com.my',domain:'@fiberail.com.my',ukey:'digi-users-v1',skey:'digi-session-v1',hours:8},FAILS={};
+const hexOf=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''),unhex=h=>new Uint8Array(h.match(/../g).map(x=>parseInt(x,16)));
+async function hashPw(pw,saltHex){const salt=saltHex?unhex(saltHex):crypto.getRandomValues(new Uint8Array(16)),k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']),bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},k,256);return{salt:hexOf(salt),hash:hexOf(bits)}}
+const users=()=>{try{return JSON.parse(localStorage.getItem(AUTH.ukey))||[]}catch(e){return[]}},saveUsers=u=>{try{localStorage.setItem(AUTH.ukey,JSON.stringify(u))}catch(e){}};
+const session=()=>{try{const s=JSON.parse(sessionStorage.getItem(AUTH.skey));return s&&s.exp>Date.now()?s:null}catch(e){return null}};
+const setSession=em=>{try{sessionStorage.setItem(AUTH.skey,JSON.stringify({email:em,exp:Date.now()+AUTH.hours*36e5}))}catch(e){}};
+const pwErr=p=>String(p).length<8?'Use at least 8 characters.':(!/[A-Za-z]/.test(p)||!/\d/.test(p))?'Use both letters and numbers.':'';
+function unlock(){document.body.classList.remove('locked');$('#lg').style.display='none';const s=session();$('#who').textContent=s?s.email+' · '+LV[curRole()]:'';document.body.classList.toggle('ro',!canEdit());render()}
+function lgShow(step,email,msg){document.body.classList.add('locked');const L=$('#lg');
+ L.innerHTML=`<form class="lgc" id="lgf"><div><h2 style="font-size:20px;margin:0">Digitalization Dept</h2><div class="k">${step==='setup'?'First sign-in: set your password':step==='login'?'Sign in':'Sign in with your work email'}</div></div>
+ ${step==='email'?`<label>Email<input name="e" type="email" autocomplete="username" placeholder="name${AUTH.domain}" value="${esc(email||'')}" required autofocus></label>`:`<div class="k"><b>${esc(email)}</b></div>`}
+ ${step==='login'?`<label>Password<input name="p" type="password" autocomplete="current-password" required autofocus></label>`:''}
+ ${step==='setup'?`<label>New password (at least 8 characters, letters and numbers)<input name="p" type="password" autocomplete="new-password" required autofocus></label><label>Confirm password<input name="p2" type="password" autocomplete="new-password" required></label>`:''}
+ ${msg?`<div class="er" style="font-size:13px">${esc(msg)}</div>`:''}
+ <button class="p">${step==='email'?'Continue':step==='login'?'Sign in':'Set password and sign in'}</button>
+ ${step!=='email'?'<button type="button" id="lgb">Use a different email</button>':''}
+ ${step==='login'?'<div class="k">Forgot your password? Ask the administrator to reset it.</div>':''}</form>`;
+ L.style.display='flex';if($('#lgb'))$('#lgb').onclick=()=>lgShow('email');
+ $('#lgf').onsubmit=async ev=>{ev.preventDefault();const d=Object.fromEntries(new FormData($('#lgf')));
+  try{
+  if(step==='email'){const em=String(d.e).trim().toLowerCase();
+   if(!em.endsWith(AUTH.domain))return lgShow('email',em,'Please use your '+AUTH.domain+' email address.');
+   const u=users().find(x=>x.email===em);
+   if(!u&&em!==AUTH.admin)return lgShow('email',em,'This email is not registered. Ask the administrator ('+AUTH.admin+') to create your account.');
+   return lgShow(u&&u.hash?'login':'setup',em)}
+  const U=users(),u=U.find(x=>x.email===email);
+  if(step==='setup'&&u&&u.hash)return lgShow('login',email);
+  if(step==='login'){const f=FAILS[email]||{n:0,until:0};
+   if(f.until>Date.now())return lgShow('login',email,'Too many attempts. Try again in '+Math.ceil((f.until-Date.now())/1000)+' seconds.');
+   const h=await hashPw(d.p,u.salt);
+   if(h.hash!==u.hash){f.n++;if(f.n>=5){f.n=0;f.until=Date.now()+30000}FAILS[email]=f;return lgShow('login',email,'Incorrect password.')}
+   delete FAILS[email];u.last=stamp();saveUsers(U);setSession(email);return unlock()}
+  const err=pwErr(d.p);if(err)return lgShow('setup',email,err);
+  if(d.p!==d.p2)return lgShow('setup',email,'The two passwords do not match.');
+  const h=await hashPw(d.p);
+  if(u){Object.assign(u,h);u.last=stamp()}else if(email===AUTH.admin)U.push({email,...h,role:'admin',created:stamp(),last:stamp()});else return lgShow('email',email,'This email is not registered.');
+  saveUsers(U);setSession(email);unlock()
+  }catch(e){lgShow(step,email,'Sign-in is not available in this browser (secure connection required).')}}}
+function authInit(){const U=users();let ch=false;U.forEach(u=>{if(u.email===AUTH.admin){if(u.role!=='admin'){u.role='admin';ch=true}}else if(u.role!=='editor'&&u.role!=='viewer'){u.role='editor';ch=true}});if(ch)saveUsers(U);const s=session();if(s&&users().some(u=>u.email===s.email&&u.hash))unlock();else lgShow('email')}
+$('#so').onclick=()=>{try{sessionStorage.removeItem(AUTH.skey)}catch(e){}lgShow('email')};
+$('#cp').onclick=()=>{const s=session();if(!s)return;const f=$('#fm');
+ f.innerHTML=`<h2>Change password</h2><label>Current password<input name="c" type="password" autocomplete="current-password" required></label><label>New password (at least 8 characters, letters and numbers)<input name="n" type="password" autocomplete="new-password" required></label><label>Confirm new password<input name="m" type="password" autocomplete="new-password" required></label><div id="cpm" class="er" style="font-size:13px"></div><div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="cx">Cancel</button><button class="p">Save</button></div>`;
+ $('#md').style.display='flex';$('#cx').onclick=()=>{$('#md').style.display='none'};
+ f.onsubmit=async ev=>{ev.preventDefault();const d=Object.fromEntries(new FormData(f)),U=users(),u=U.find(x=>x.email===s.email);if(!u)return;
+  const h=await hashPw(d.c,u.salt);if(h.hash!==u.hash)return void($('#cpm').textContent='Current password is incorrect.');
+  const err=pwErr(d.n);if(err)return void($('#cpm').textContent=err);if(d.n!==d.m)return void($('#cpm').textContent='The new passwords do not match.');
+  Object.assign(u,await hashPw(d.n));saveUsers(U);$('#md').style.display='none';tell('Your password has been changed.')}};
+const LV={admin:'Administrator',editor:'Editor',viewer:'Viewer'};
+const isAdmin=()=>{const s=session();return !!s&&s.email===AUTH.admin};
+const curRole=()=>{const s=session();if(!s)return '';if(s.email===AUTH.admin)return 'admin';const u=users().find(x=>x.email===s.email);return u?u.role:''};
+const canEdit=()=>['admin','editor'].includes(curRole());
+function addUser(){if(!isAdmin())return;const f=$('#fm');
+ f.innerHTML=`<h2>Add user</h2><label>Email (${AUTH.domain})<input name="e" type="email" placeholder="name${AUTH.domain}" required></label><label>User level<select name="r"><option value="editor">Editor: add, edit and delete data</option><option value="viewer">Viewer: read-only</option></select></label><div id="aum" class="er" style="font-size:13px"></div><div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="cx">Cancel</button><button class="p">Create user</button></div>`;
+ $('#md').style.display='flex';$('#cx').onclick=()=>{$('#md').style.display='none'};
+ f.onsubmit=ev=>{ev.preventDefault();const d=Object.fromEntries(new FormData(f)),em=String(d.e).trim().toLowerCase(),U=users();
+  if(!em.endsWith(AUTH.domain))return void($('#aum').textContent='Only '+AUTH.domain+' email addresses are allowed.');
+  if(em===AUTH.admin||U.some(u=>u.email===em))return void($('#aum').textContent='This user already exists.');
+  U.push({email:em,role:d.r,created:stamp()});saveUsers(U);$('#md').style.display='none';render()}}
+function usrView(){if(!isAdmin())return '';
+ const rows=users().map(u=>`<tr><td>${esc(u.email)}</td><td>${u.email===AUTH.admin?'Administrator':`<select data-ulv="${esc(u.email)}">${['editor','viewer'].map(r=>`<option value="${r}" ${u.role===r?'selected':''}>${LV[r]}</option>`).join('')}</select>`}</td><td>${u.hash?'<span class="bd ok">Active</span>':'<span class="bd wr">Awaiting first sign-in</span>'}</td><td>${fmtD(u.created)}</td><td>${fmtDT(u.last)||'–'}</td><td class="n">${u.email===AUTH.admin?'':`<button class="x" data-ua="reset" data-ue="${esc(u.email)}">Reset password</button> <button class="x" data-ua="del" data-ue="${esc(u.email)}">Delete</button>`}</td></tr>`).join('');
+ return `<div class="c" style="margin-bottom:14px"><div class="tb"><h2>User management</h2><button class="p" id="ua">+ Add user</button></div><div class="k" style="margin-bottom:8px">Only ${AUTH.domain} emails can sign in, and only users created here. A new user sets their own password at first sign-in.</div><div class="tw"><table><thead><tr><th>Email</th><th>Level</th><th>Status</th><th>Created</th><th>Last sign-in</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></div>
+ <div class="c"><h2>User levels</h2><div class="k"><b>Administrator</b> (${AUTH.admin}): full access, and creates users, sets levels, resets passwords and deletes users.<br><b>Editor</b>: can view everything and add, edit, delete and import data.<br><b>Viewer</b>: read-only. Can view, search, filter, open reports and export, but cannot change data.</div><div class="k" style="margin-top:8px">Accounts are stored only in this browser.</div></div>`}
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-ua]');if(!b||!isAdmin())return;const U=users(),u=U.find(x=>x.email===b.dataset.ue);if(!u||u.email===AUTH.admin)return;
+ if(b.dataset.ua==='reset')ask('Reset the password for '+u.email+'? They will set a new one at their next sign-in.','Reset').then(ok=>{if(ok){delete u.hash;delete u.salt;saveUsers(U);render()}});
+ else ask('Delete the user '+u.email+'?','Delete').then(ok=>{if(ok){saveUsers(U.filter(x=>x.email!==u.email));render()}})});
+document.addEventListener('change',ev=>{const t=ev.target;if(!t.dataset||!t.dataset.ulv||!isAdmin())return;const U=users(),u=U.find(x=>x.email===t.dataset.ulv);if(u&&u.email!==AUTH.admin&&LV[t.value]&&t.value!=='admin'){u.role=t.value;saveUsers(U);render()}});
+const ytot=d=>CATS.reduce((a,c)=>{const L=d[c].lines;a.b+=L.reduce((s,l)=>s+(+l.budget||0),0);a.a+=d[c].tx.filter(x=>L.some(l=>l.code===x.code)).reduce((s,x)=>s+myr(x),0);return a},{b:0,a:0});
+const myr=t=>(t.cur==='USD'?S.rate:1)*(+t.amount||0);
+const act=(c,code)=>S[c].tx.filter(t=>t.code===code).reduce((a,t)=>a+myr(t),0);
+const tot=c=>{const L=S[c].lines,b=L.reduce((a,l)=>a+(+l.budget||0),0),a=L.reduce((s,l)=>s+act(c,l.code),0),
+ all=S[c].tx.reduce((s,t)=>s+myr(t),0);return{b,a,r:b-a,u:b?a/b:0,un:all-a,unn:S[c].tx.filter(t=>!L.some(l=>l.code===t.code)).length}};
+const stat=(a,b)=>!a?['No spend','mu']:a>b?['Over budget','er']:a>=.8*b?['Near limit','wr']:['Within budget','ok'];
+const hit=r=>!$('#q').value||JSON.stringify(Object.values(r)).toLowerCase().includes($('#q').value.toLowerCase());
+const bar=(u,col)=>`<div class="bar"><i style="width:${Math.min(100,u*100)}%;background:${col}"></i></div>`;
+const tbl=(cols,rows,e,c)=>`<div class="tw"><table><thead><tr>${cols.map(x=>`<th class="${x.n?'n':''}">${x.h}</th>`).join('')}<th></th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${cols.map(x=>`<td class="${x.n?'n':''}">${x.f(r)}</td>`).join('')}<td class="n" style="white-space:nowrap"><button class="x" data-a="edit" data-e="${e}" data-c="${c}" data-i="${r.id}">Edit</button> <button class="x" data-a="del" data-e="${e}" data-c="${c}" data-i="${r.id}">Delete</button></td></tr>`).join(''):`<tr><td colspan="${cols.length+1}" class="mu">No records match.</td></tr>`}</tbody></table></div>`;
+const sel=(id,opts,all)=>`<select data-f="${id}"><option value="">${all}</option>${opts.map(o=>`<option ${F[id]===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+function chart(id,cfg){const el=document.getElementById(id);if(!el)return;if(CH[id])CH[id].destroy();
+ const st=getComputedStyle(document.documentElement);Chart.defaults.color=st.getPropertyValue('--mu').trim()||'#666';Chart.defaults.borderColor=st.getPropertyValue('--bd').trim()||'#ddd';
+ cfg.options={responsive:true,maintainAspectRatio:false,...cfg.options};CH[id]=new Chart(el,cfg)}
+const ax=(f)=>({ticks:{callback:v=>f?f(v):(v>=1e6?(v/1e6)+'M':v>=1e3?(v/1e3)+'k':v)}});
+const kp=(k,v,s)=>`<div class="c"><div class="k">${k}</div><div class="v">${v}</div>${s||''}</div>`;
+
+function overview(){
+ const T=CATS.map(tot),B=T.reduce((a,t)=>a+t.b,0),A=T.reduce((a,t)=>a+t.a,0);
+ const top=CATS.flatMap(c=>S[c].lines.map(l=>({n:l.name,a:act(c,l.code),b:+l.budget,c}))).filter(x=>x.a).sort((x,y)=>y.a-x.a).slice(0,5);
+ return segNav()+seg('seg-budget','Budget And Expenses','Budget, actual spend and year-on-year trends','#15803d',`<div class="g g4">${kp('Total budget',rm(B))}${kp('Total actual',rm(A))}${kp('Remaining',rm(B-A))}${kp('Overall utilisation',pc(B?A/B:0),bar(B?A/B:0,'var(--ac)'))}</div>
+ <div class="g g4">${CATS.map((c,i)=>kp(CN[c][0]+' utilisation',pc(T[i].u),`${bar(T[i].u,CN[c][2])}<div class="k" style="margin-top:6px">${rm(T[i].a)} of ${rm(T[i].b)}</div>`)).join('')}</div>
+ <div class="g g2"><div class="c"><h2>Budget vs actual by category</h2><div class="ch"><canvas id="c1"></canvas></div></div>
+ <div class="c"><h2>Budget allocation mix</h2><div class="ch"><canvas id="c2"></canvas></div></div>
+ <div class="c"><h2>Monthly actual spend (RM)</h2><div class="ch"><canvas id="c3"></canvas></div></div>
+ <div class="c"><h2>Top 5 spend lines</h2><div class="ch"><canvas id="c4"></canvas></div></div>
+ <div class="c"><h2>Year-on-year: budget vs actual (RM)</h2><div class="ch"><canvas id="c5"></canvas></div></div>
+ <div class="c"><h2>Budget by category per year (RM)</h2><div class="ch"><canvas id="c6"></canvas></div></div>
+ <div class="c"><h2>Actual spend by category per year (RM)</h2><div class="ch"><canvas id="c7"></canvas></div></div>
+ <div class="c"><h2>Budget utilisation trend (% used)</h2><div class="ch"><canvas id="c8"></canvas></div></div></div>${yoyTable()}`)+seg('seg-work','Projects & tasks','Progress of projects, tasks and assignments','#0891b2',projStrip())+seg('seg-svc','Service availability','AWS cloud and LAN & WAN availability against target','#2563eb',svcStrip()||'<p class="mu">No service availability KPIs yet. Add one on the KPIs tab.</p>')+seg('seg-kpi','KPI performance','Departmental KPI targets, achievements and score','#ea580c',kpiStrip()+kpiExtra())}
+function overviewCharts(){
+ const T=CATS.map(tot),cl=CATS.map(c=>CN[c][3]);
+ chart('c1',{type:'bar',data:{labels:CATS.map(c=>CN[c][0]),datasets:[{label:'Budget',data:T.map(t=>t.b),backgroundColor:'#b6c5d1'},{label:'Actual',data:T.map(t=>t.a),backgroundColor:cl}]},options:{scales:{y:ax()}}});
+ chart('c2',{type:'doughnut',data:{labels:CATS.map(c=>CN[c][0]),datasets:[{data:T.map(t=>t.b),backgroundColor:cl,borderWidth:0}]},options:{plugins:{tooltip:{callbacks:{label:x=>x.label+': '+rm(x.raw)}}}}});
+ const mo=[...new Set(CATS.flatMap(c=>S[c].tx.filter(t=>t.date&&S[c].lines.some(l=>l.code===t.code)).map(t=>t.date.slice(0,7))))].sort();
+ chart('c3',{type:'bar',data:{labels:mo.map(fmtM),datasets:CATS.map((c,i)=>({label:CN[c][0],backgroundColor:cl[i],data:mo.map(m=>S[c].tx.filter(t=>t.date.slice(0,7)===m&&S[c].lines.some(l=>l.code===t.code)).reduce((a,t)=>a+myr(t),0))}))},options:{scales:{x:{stacked:true},y:{stacked:true,...ax()}}}});
+ const top=CATS.flatMap(c=>S[c].lines.map(l=>({n:l.name,a:act(c,l.code),b:+l.budget,c}))).filter(x=>x.a).sort((x,y)=>y.a-x.a).slice(0,5);
+ chart('c4',{type:'bar',data:{labels:top.map(x=>x.n.slice(0,28)),datasets:[{label:'Actual',data:top.map(x=>x.a),backgroundColor:top.map(x=>CN[x.c][3])}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:ax()}}});
+ stashTo(S);const Y=Object.keys(S.years).sort(),yt=Y.map(y=>ytot(S.years[y]));
+ chart('c5',{type:'bar',data:{labels:Y,datasets:[{label:'Budget',data:yt.map(x=>x.b),backgroundColor:'#b6c5d1'},{label:'Actual',data:yt.map(x=>x.a),backgroundColor:'#22c55e'}]},options:{scales:{y:ax()}}});
+ const YT=Y.map(y=>CATS.map(c=>ctot(S.years[y],c))),by=k=>CATS.map((c,i)=>({label:CN[c][0],data:YT.map(r=>r[i][k]),backgroundColor:CN[c][3]}));
+ chart('c6',{type:'bar',data:{labels:Y,datasets:by('b')},options:{scales:{y:ax()}}});
+ chart('c7',{type:'bar',data:{labels:Y,datasets:by('a')},options:{scales:{y:ax()}}});
+ chart('c8',{type:'line',data:{labels:Y,datasets:CATS.map((c,i)=>({label:CN[c][0],data:YT.map(r=>+(r[i].u*100).toFixed(1)),borderColor:CN[c][3],backgroundColor:CN[c][3],tension:.25}))},options:{scales:{y:{min:0,title:{display:true,text:'% of budget used'}}}}});
+ const rk=S.kpi.filter(k=>ach(k)!=null);
+ if(rk.length)chart('o1',{type:'bar',data:{labels:PERS,datasets:[{label:'Average achievement %',data:PERS.map(p=>{const q=rk.filter(k=>k.perspective===p);return q.length?+(sm(q,k=>Math.min(1,ach(k)))/q.length*100).toFixed(1):0}),backgroundColor:'#22c55e'}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}});
+ else $('#ob').innerHTML='<p class="mu">No KPI actuals entered yet.</p>';
+ const SS=['Achieved','On track','At risk','Not reported'];
+ chart('o2',{type:'doughnut',data:{labels:SS,datasets:[{data:SS.map(s=>S.kpi.filter(k=>kst(ach(k))[0]===s).length),backgroundColor:['#16a34a','#3b82f6','#f97316','#b6c5d1'],borderWidth:0}]}})}
+const ach=k=>{if(k.actual===''||k.actual==null||!+k.target)return null;const a=+k.actual;return k.dir==='lo'?(a>0?k.target/a:1):a/k.target};
+const kst=a=>a==null?['Not reported','mu']:a>=1?['Achieved','ok']:a>=.8?['On track','wr']:['At risk','er'];
+function kpiStrip(){const K=S.kpi,r=K.filter(k=>ach(k)!=null),sc=r.reduce((s,k)=>s+(+k.weight||0)*Math.min(1,ach(k)),0);
+ return `<div class="g g4">${kp('KPIs reported',r.length+' / '+K.length)}${kp('Weighted KPI score',sc.toFixed(1)+' / '+K.reduce((s,k)=>s+(+k.weight||0),0),'<div class="k">Open the KPI tab to enter actuals</div>')}</div>`}
+
+function catView(c){
+ const C=S[c],t=tot(c),[nm,bl,col]=CN[c];
+ const L=C.lines.map(l=>({...l,a:act(c,l.code)})).filter(l=>hit(l)&&(!F[c+'s']||stat(l.a,l.budget)[0]===F[c+'s'])&&(!F.cd||!HD.includes(c)||l.dept===F.cd));
+ const X=C.tx.filter(x=>hit(x)&&(!F[c+'c']||(F[c+'c']==='(unallocated)'?!C.lines.some(l=>l.code===x.code):x.code===F[c+'c'])));
+ return `<div class="g g4">${kp(bl+' budget',rm(t.b))}${kp('Actual',rm(t.a))}${kp('Remaining',rm(t.r))}${kp('Utilisation',pc(t.u),bar(t.u,col))}${t.unn?kp('Unallocated',rm(t.un),`<div class="k">${t.unn} transaction(s) with no matching budget code</div>`):''}</div>
+ <div class="c" style="margin-bottom:14px"><h2>${nm}: ${bl.toLowerCase()} vs actual by line</h2><div class="ch" style="height:${Math.max(220,C.lines.length*26+60)}px"><canvas id="cc"></canvas></div></div>
+ <div class="c" style="margin-bottom:14px"><div class="tb"><h2>${nm} budget lines</h2>${sel(c+'s',['No spend','Within budget','Near limit','Over budget'],'All statuses')}${HD.includes(c)?sel('cd',S.depts,'All departments'):''}<button class="p" data-a="add" data-e="line" data-c="${c}">+ Add line</button></div>
+ ${tbl([{h:'Code',f:l=>esc(l.code)},{h:'Description',f:l=>esc(l.name)},...(HD.includes(c)?[{h:'Requested Dept',f:l=>esc(l.dept)||'<span class="mu">–</span>'}]:[]),{h:bl+' (RM)',n:1,f:l=>rm(l.budget)},{h:'Actual (RM)',n:1,f:l=>rm(l.a)},{h:'Remaining (RM)',n:1,f:l=>`<span class="${l.budget-l.a<0?'er':''}">${rm(l.budget-l.a)}</span>`},{h:'Used',f:l=>bar(l.budget?l.a/l.budget:(l.a?1:0),`var(--${stat(l.a,l.budget)[1]==='mu'?'bd':stat(l.a,l.budget)[1]})`)},{h:'Status',f:l=>{const s=stat(l.a,l.budget);return`<span class="bd ${s[1]}">${s[0]}</span>`}},{h:'Remarks',f:l=>`<div style="white-space:pre-wrap;min-width:180px;max-width:320px">${esc(l.remarks)}</div>`},{h:'Last updated',f:l=>fu(l.updated)}],L,'line',c)}</div>
+ <div class="c"><div class="tb"><h2>${nm} purchases / transactions</h2>${sel(c+'c',[...C.lines.map(l=>l.code),'(unallocated)'],'All codes')}<button class="p" data-a="add" data-e="tx" data-c="${c}">+ Add transaction</button></div>
+ ${tbl([{h:'Date',f:x=>fmtD(x.date)},{h:'Code',f:x=>esc(x.code)||'<span class="mu">–</span>'},{h:'Description',f:x=>esc(x.desc)},{h:'Amount',n:1,f:x=>(x.cur==='USD'?'USD ':'RM ')+(+x.amount).toLocaleString('en-MY',{minimumFractionDigits:2})},{h:'RM value',n:1,f:x=>rm(myr(x))},{h:'PO date',f:x=>fmtD(x.po)},{h:'GR date',f:x=>fmtD(x.gr)},{h:'Vendor',f:x=>esc(x.vendor)},{h:'Remarks',f:x=>`<div style="white-space:pre-wrap;min-width:180px;max-width:320px">${esc(x.remarks)}</div>`},{h:'Last updated',f:x=>fu(x.updated)}],X,'tx',c)}</div>${catYoy(c)}`}
+function catChart(c){const L=S[c].lines;{const Y=yrs(),yt=Y.map(y=>ctot(S.years[y],c));chart('cy',{type:'bar',data:{labels:Y,datasets:[{label:CN[c][1],data:yt.map(x=>x.b),backgroundColor:'#b6c5d1'},{label:'Actual',data:yt.map(x=>x.a),backgroundColor:CN[c][3]}]},options:{scales:{y:ax()}}})}chart('cc',{type:'bar',data:{labels:L.map(l=>l.code+' '+l.name.slice(0,26)),datasets:[{label:CN[c][1],data:L.map(l=>+l.budget),backgroundColor:'#b6c5d1'},{label:'Actual',data:L.map(l=>act(c,l.code)),backgroundColor:CN[c][3]}]},options:{indexAxis:'y',scales:{x:ax()}}})}
+
+function kpiView(){
+ const K=S.kpi.filter(k=>hit(k)&&(!F.kp||k.perspective===F.kp)&&(!F.ks||kst(ach(k))[0]===F.ks));
+ return kpiStrip()+`<div class="g g2"><div class="c"><h2>Achievement vs target (%)</h2><div class="ch" id="kb"><canvas id="k1"></canvas></div></div><div class="c"><h2>Weighting by perspective</h2><div class="ch"><canvas id="k2"></canvas></div></div></div>
+ <div class="c"><div class="tb"><h2>Departmental KPIs: target, achievement &amp; progress</h2>${sel('kp',PERS,'All perspectives')}${sel('ks',['Achieved','On track','At risk','Not reported'],'All statuses')}<button class="p" data-a="add" data-e="kpi">+ Add KPI</button></div>
+ ${tbl([{h:'Perspective',f:k=>esc(k.perspective)},{h:'KPI',f:k=>esc(k.kpi)},{h:'Target',n:1,f:k=>k.target+' '+esc(k.unit)+(k.dir==='lo'?' (max)':'')},{h:'Actual',n:1,f:k=>k.actual===''?'<span class="mu">–</span>':k.actual},{h:'Weight %',n:1,f:k=>k.weight},{h:'Progress',f:k=>{const a=ach(k);return a==null?bar(0):`${bar(a,`var(--${kst(a)[1]})`)}<span class="k">${pc(a)}</span>`}},{h:'Status',f:k=>{const s=kst(ach(k));return`<span class="bd ${s[1]}">${s[0]}</span>`}},{h:'Remarks',f:k=>esc(k.remarks)},{h:'Last updated',f:k=>fu(k.updated)}],K,'kpi','')}</div>`}
+function kpiCharts(){const r=S.kpi.filter(k=>ach(k)!=null);
+ if(r.length)chart('k1',{type:'bar',data:{labels:r.map(k=>k.kpi.slice(0,34)),datasets:[{label:'Achievement %',data:r.map(k=>+(ach(k)*100).toFixed(1)),backgroundColor:r.map(k=>ach(k)>=1?'#16a34a':ach(k)>=.8?'#3b82f6':'#ea580c')}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0}}}});
+ else $('#kb').innerHTML='<p class="mu">No actuals entered yet. Edit a KPI and enter its actual value to see progress here.</p>';
+ const w=PERS.map(p=>S.kpi.filter(k=>k.perspective===p).reduce((a,k)=>a+(+k.weight||0),0));
+ chart('k2',{type:'doughnut',data:{labels:PERS,datasets:[{data:w,backgroundColor:['#22c55e','#3b82f6','#f97316','#06b6d4'],borderWidth:0}]}})}
+
+const PS=['Not started','In progress','On hold','Completed','Cancelled'],PT=['Capex','MPOA','Opex','Others'],PP=['High','Medium','Low'];
+const od=p=>p.due&&p.due<new Date().toISOString().slice(0,10)&&!['Completed','Cancelled'].includes(p.status);
+const pcol=p=>p.status==='Completed'?'ok':od(p)?'er':p.status==='On hold'?'wr':p.status==='In progress'?'ac':'mu';
+const pavg=()=>{const L=S.proj.filter(p=>p.status!=='Cancelled');return L.length?L.reduce((s,p)=>s+Math.min(100,+p.progress||0),0)/L.length:0};
+function projStrip(){const A=S.proj;return `<div class="g g4">${kp('Projects in progress',A.filter(p=>p.status==='In progress').length+' of '+A.length)}${kp('Overdue items',A.filter(od).length)}${kp('Open tasks',S.tasks.filter(t=>!['Completed','Cancelled'].includes(t.status)).length+' of '+S.tasks.length,'<div class="k">'+S.tasks.filter(od).length+' overdue</div>')}${kp('Average progress',pavg().toFixed(0)+'%',bar(pavg()/100,'var(--ac)'))}</div>`}
+function projView(){
+ const A=S.proj,P=A.filter(p=>hit(p)&&(!F.ps||p.status===F.ps)&&(!F.pt||p.type===F.pt)&&(!F.pp||p.priority===F.pp));
+ return `<div class="g g4">${kp('Projects tracked',A.length)}${kp('In progress',A.filter(p=>p.status==='In progress').length)}${kp('Completed',A.filter(p=>p.status==='Completed').length)}${kp('Overdue',A.filter(od).length,'<div class="k">Past due date and not completed</div>')}${kp('Average progress',pavg().toFixed(0)+'%',bar(pavg()/100,'var(--ac)'))}</div>
+ <div class="g g2"><div class="c"><h2>Status breakdown</h2><div class="ch"><canvas id="p1"></canvas></div></div><div class="c"><h2>Progress by item (%)</h2><div class="ch" id="pb" style="height:${Math.max(260,A.length*26+60)}px"><canvas id="p2"></canvas></div></div></div>
+ <div class="c"><div class="tb"><h2>Project List</h2>${sel('pt',PT,'All types')}${sel('ps',PS,'All statuses')}${sel('pp',PP,'All priorities')}<button class="p" data-a="add" data-e="proj">+ Add project</button></div>
+ ${tbl([{h:'Name',f:p=>esc(p.name)},{h:'Type',f:p=>p.type},{h:'Owner',f:p=>esc(p.owner)||'<span class="mu">–</span>'},{h:'Priority',f:p=>`<span class="${p.priority==='High'?'er':p.priority==='Low'?'mu':''}">${p.priority}</span>`},{h:'Status',f:p=>`<span class="bd ${pcol(p)}">${od(p)?'Overdue':p.status}</span>${od(p)?'<span class="k"> ('+p.status+')</span>':''}`},{h:'Start → Due',f:p=>`${fmtD(p.start)||'–'} → ${fmtD(p.due)||'–'}`},{h:'Progress (drag to update)',f:p=>`<div style="display:flex;gap:6px;align-items:center"><input type="range" min="0" max="100" step="5" value="${Math.min(100,+p.progress||0)}" data-pr="${p.id}" style="width:100px;padding:0"><b>${Math.min(100,+p.progress||0)}%</b></div>`},{h:'Budget code',f:p=>esc(p.code)},{h:'Latest update / notes',f:p=>`<div style="white-space:pre-wrap;min-width:200px;max-width:340px">${esc(p.notes)}</div>`},{h:'Remarks',f:p=>esc(p.remarks)},{h:'Last updated',f:p=>fu(p.updated)}],P,'proj','')}</div>`}
+function projCharts(){const A=S.proj,cnt=PS.map(s=>A.filter(p=>p.status===s).length);
+ chart('p1',{type:'doughnut',data:{labels:PS,datasets:[{data:cnt,backgroundColor:['#b6c5d1','#22c55e','#3b82f6','#15803d','#7a8c9a'],borderWidth:0}]}});
+ if(A.length)chart('p2',{type:'bar',data:{labels:A.map(p=>p.name.slice(0,32)),datasets:[{label:'Progress %',data:A.map(p=>Math.min(100,+p.progress||0)),backgroundColor:A.map(p=>({ok:'#15803d',er:'#ea580c',wr:'#3b82f6',ac:'#22c55e',mu:'#b6c5d1'}[pcol(p)]))}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100}}}});
+ else $('#pb').innerHTML='<p class="mu">No projects yet. Use + Add project.</p>'}
+const TT=['Task','Assignment','Action Item'];
+const tavg=()=>{const L=S.tasks.filter(p=>p.status!=='Cancelled');return L.length?L.reduce((s,p)=>s+Math.min(100,+p.progress||0),0)/L.length:0};
+function taskView(){
+ const A=S.tasks,P=A.filter(p=>hit(p)&&(!F.ts||p.status===F.ts)&&(!F.tt||p.type===F.tt)&&(!F.tp||p.priority===F.tp)&&(!F.td||p.dept===F.td));
+ return `<div class="g g4">${kp('Tasks tracked',A.length)}${kp('In progress',A.filter(p=>p.status==='In progress').length)}${kp('Completed',A.filter(p=>p.status==='Completed').length)}${kp('Overdue',A.filter(od).length,'<div class="k">Past due date and not completed</div>')}${kp('Average progress',tavg().toFixed(0)+'%',bar(tavg()/100,'var(--ac)'))}</div>
+ <div class="g g2"><div class="c"><h2>Status breakdown</h2><div class="ch"><canvas id="t1"></canvas></div></div><div class="c"><h2>Progress by item (%)</h2><div class="ch" id="tb" style="height:${Math.max(260,A.length*26+60)}px"><canvas id="t2"></canvas></div></div></div>
+ <div class="c"><div class="tb"><h2>Task/Assignment List</h2>${sel('tt',TT,'All types')}${sel('ts',PS,'All statuses')}${sel('tp',PP,'All priorities')}${sel('td',S.depts,'All departments')}<button class="p" data-a="add" data-e="task">+ Add task</button></div>
+ ${tbl([{h:'Name',f:p=>esc(p.name)},{h:'Type',f:p=>p.type},{h:'Assignee',f:p=>esc(p.owner)||'<span class="mu">–</span>'},{h:'Related Dept',f:p=>esc(p.dept)||'<span class="mu">–</span>'},{h:'Priority',f:p=>`<span class="${p.priority==='High'?'er':p.priority==='Low'?'mu':''}">${p.priority}</span>`},{h:'Status',f:p=>`<span class="bd ${pcol(p)}">${od(p)?'Overdue':p.status}</span>${od(p)?'<span class="k"> ('+p.status+')</span>':''}`},{h:'Start → Due',f:p=>`${fmtD(p.start)||'–'} → ${fmtD(p.due)||'–'}`},{h:'Progress (drag to update)',f:p=>`<div style="display:flex;gap:6px;align-items:center"><input type="range" min="0" max="100" step="5" value="${Math.min(100,+p.progress||0)}" data-pr="${p.id}" style="width:100px;padding:0"><b>${Math.min(100,+p.progress||0)}%</b></div>`},{h:'Related project',f:p=>esc(p.project)},{h:'Latest update / notes',f:p=>`<div style="white-space:pre-wrap;min-width:200px;max-width:340px">${esc(p.notes)}</div>`},{h:'Remarks',f:p=>esc(p.remarks)},{h:'Last updated',f:p=>fu(p.updated)}],P,'task','')}</div>`}
+function taskCharts(){const A=S.tasks,cnt=PS.map(s=>A.filter(p=>p.status===s).length);
+ chart('t1',{type:'doughnut',data:{labels:PS,datasets:[{data:cnt,backgroundColor:['#b6c5d1','#22c55e','#3b82f6','#15803d','#7a8c9a'],borderWidth:0}]}});
+ if(A.length)chart('t2',{type:'bar',data:{labels:A.map(p=>p.name.slice(0,32)),datasets:[{label:'Progress %',data:A.map(p=>Math.min(100,+p.progress||0)),backgroundColor:A.map(p=>({ok:'#15803d',er:'#ea580c',wr:'#3b82f6',ac:'#22c55e',mu:'#b6c5d1'}[pcol(p)]))}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100}}}});
+ else $('#tb').innerHTML='<p class="mu">No tasks yet. Use + Add task.</p>'}
+function render(){if(view==='usr'&&!isAdmin())view='overview';
+ $('#nav').innerHTML=[['overview','Overview'],...CATS.map(c=>[c,CN[c][0]]),['proj','Projects'],['task','Tasks'],['kpi','KPIs'],['rep','Reports'],['db','Database'],...(isAdmin()?[['usr','Users']]:[])].map(([k,l])=>`<button class="${view===k?'on':''}" data-v="${k}">${l}</button>`).join('');
+ stashTo(S);$('#rate').value=S.rate;{const lu=S.lastSaved||Object.values(S.years).flatMap(d=>[...d.proj,...d.tasks,...d.kpi,...CATS.flatMap(c=>[...d[c].lines,...d[c].tx])].map(x=>x.updated)).filter(Boolean).sort().pop(),dt=lu?new Date(lu):null;$('#lu').textContent='Last updated: '+(dt&&!isNaN(dt)?fmtDT(dt):'–')}$('#yr').innerHTML=Object.keys(S.years).sort().reverse().map(y=>`<option ${y===S.year?'selected':''}>${y}</option>`).join('');
+ $('#main').innerHTML=`<div class="k" style="margin-bottom:10px">Showing <b>${S.year}</b> data · ${Object.keys(S.years).length} year(s) stored. Change year from the header.</div>`+(view==='overview'?overview():view==='kpi'?kpiView():view==='proj'?projView():view==='task'?taskView():view==='rep'?repView():view==='db'?dbView():view==='usr'?usrView():catView(view));
+ if(view==='overview'){overviewCharts();document.querySelectorAll('[data-jump]').forEach(b=>{b.onclick=()=>document.getElementById(b.dataset.jump).scrollIntoView({behavior:'smooth'})})}else if(view==='kpi')kpiCharts();else if(view==='proj')projCharts();else if(view==='task')taskCharts();else if(view==='rep'){repBind()}else if(view==='usr'){const b=$('#ua');if(b)b.onclick=addUser}else if(view==='db'){$('#dbj').onclick=dlDb}else catChart(view)}
+
+const FLD={
+ line:[['code','Code'],['name','Description'],['budget','Budget (RM)','number'],['remarks','Remarks','area']],
+ proj:[['name','Project name'],['type','Type','select',PT],['owner','Owner / assignee'],['priority','Priority','select',PP],['status','Status','select',PS],['start','Start date','date'],['due','Due date','date'],['progress','Progress %','number'],['code','Linked budget code (optional)'],['notes','Latest update / notes','area'],['remarks','Remarks']],
+ task:[['name','Task'],['type','Type','select',TT],['owner','Assignee'],['project','Related project (optional)','code'],['dept','Related Dept'],['priority','Priority','select',PP],['status','Status','select',PS],['start','Start date','date'],['due','Due date','date'],['progress','Progress %','number'],['notes','Latest update / notes','area'],['remarks','Remarks']],
+ tx:[['date','Date','date'],['code','Budget code','code'],['desc','Description'],['amount','Amount','number'],['cur','Currency','select',['MYR','USD']],['po','PO date','date'],['gr','GR date','date'],['vendor','Vendor','vend'],['remarks','Remarks','area']],
+ kpi:[['perspective','Perspective','select',PERS],['kpi','KPI'],['target','Target','number'],['actual','Actual (blank if not yet reported)','number'],['unit','Unit'],['weight','Weight %','number'],['dir','Better when','select',['hi','lo'],{hi:'Higher',lo:'Lower'}],['remarks','Remarks']]};
+const list=(e,c)=>e==='kpi'?S.kpi:e==='proj'?S.proj:e==='task'?S.tasks:S[c][e==='line'?'lines':'tx'];
+function form(e,c,row){
+ const FL=FLD[e].flatMap(f=>e==='tx'&&f[0]==='vendor'?[['vendor','Vendor','select',['',...vlist(row&&row.vendor)]],['vendor_new','Or add a new vendor']]:(e==='proj'||e==='task')&&f[0]==='owner'?[['owner',f[1],'select',['',...olist(row&&row.owner)]],['owner_new','Or add a new '+(e==='task'?'assignee':'owner')]]:e==='task'&&f[0]==='dept'?[['dept','Related Dept','select',['',...new Set([...S.depts,row&&row.dept].filter(Boolean))]],['dept_new','Or add a new department']]:[f]).concat(e==='line'&&HD.includes(c)?[['dept','Requested Dept','select',['',...new Set([...S.depts,row&&row.dept].filter(Boolean))]],['dept_new','Or add a new department']]:[]);
+ const r=row||(e==='tx'?{cur:'MYR'}:e==='task'?{type:'Task',priority:'Medium',status:'Not started',progress:0}:e==='proj'?{type:'Capex',priority:'Medium',status:'Not started',progress:0}:e==='kpi'?{perspective:'Business',dir:'hi',weight:0}:{});
+ $('#fm').innerHTML=`<h2>${row?'Edit':'Add'} ${e==='line'?'budget line':e==='tx'?'transaction':e==='proj'?'project':e==='task'?'task':'KPI'}</h2>`+FL.map(([k,l,t,o,lb])=>`<label>${l}${t==='date'?' (DD/MMM/YYYY: type digits only, e.g. 03112026)':''}${t==='area'?`<textarea name="${k}" rows="6" placeholder="One update per line, e.g. 12 Nov: vendor confirmed, UAT 60% done" style="width:100%;font:inherit;color:var(--tx);background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:6px 10px;resize:vertical">${esc(r[k])}</textarea>`:t==='select'?`<select name="${k}">${o.map(v=>`<option value="${v}" ${r[k]===v?'selected':''}>${lb?lb[v]:v}</option>`).join('')}</select>`:`<input name="${k}" type="${t==='code'||t==='vend'||t==='date'?'text':t||'text'}" ${t==='number'?'step="any"':t==='date'?'data-date inputmode="numeric" placeholder="DD/MMM/YYYY" maxlength="11" autocomplete="off"':''} ${t==='code'?'list="cl"':t==='vend'?'list="vl"':''} value="${esc(t==='date'?fmtD(r[k]):r[k])}">`}</label>`).join('')+
+ (e==='tx'?`<datalist id="cl">${S[c].lines.map(l=>`<option value="${esc(l.code)}">`).join('')}</datalist><datalist id="vl">${vlist().map(v=>`<option value="${esc(v)}">`).join('')}</datalist>`:e==='task'?`<datalist id="cl">${S.proj.map(p=>`<option value="${esc(p.name)}">`).join('')}</datalist>`:'')+`<div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="cx">Cancel</button><button class="p">Save</button></div>`;
+ $('#md').style.display='flex';$('#cx').onclick=()=>$('#md').style.display='none';
+ $('#fm').onsubmit=ev=>{ev.preventDefault();const d=Object.fromEntries(new FormData($('#fm')));
+  for(const [k,,t] of FLD[e])if(t==='date'&&normD(d[k])===null){const el=$('#fm').elements[k];el.setCustomValidity('Use DD/MMM/YYYY, for example 03/Nov/2026');el.reportValidity();return}
+  FLD[e].forEach(([k,,t])=>{if(t==='date')d[k]=parseD(d[k]);if(t==='number'&&d[k]!=='')d[k]=+d[k];if(t==='number'&&d[k]===''&&k!=='actual')d[k]=0});
+  if(d.dept_new!==undefined){const n=String(d.dept_new).trim();if(n){d.dept=n;if(!S.depts.includes(n))S.depts.push(n)}delete d.dept_new}
+  if(d.vendor_new!==undefined){const n=String(d.vendor_new).trim();if(n)d.vendor=n;delete d.vendor_new}
+  if(d.owner_new!==undefined){const n=String(d.owner_new).trim();if(n)d.owner=n;delete d.owner_new}
+  if((e==='proj'||e==='task')&&d.owner){S.owners=S.owners||[];if(!S.owners.includes(d.owner))S.owners.push(d.owner)}
+  const a=list(e,c);d.updated=stamp();if(e==='tx'&&d.vendor)addVendor(d.vendor);if(row)Object.assign(row,d);else a.push({id:uid(),...d});save();$('#md').style.display='none';render()}}
+
+const vlist=cur=>[...new Set([...(S.vendors||[]),...CATS.flatMap(c=>S[c].tx.map(x=>x.vendor)),cur].map(v=>String(v||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+const addVendor=v=>{S.vendors=S.vendors||[];if(!S.vendors.includes(v))S.vendors.push(v)};
+const HD=['capex','mpoa','opex'];
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-v],[data-a]');if(!b)return;
+ if(b.dataset.v){view=b.dataset.v;F={};return render()}
+ const{a,e,c,i}=b.dataset;if(!canEdit())return void tell('Your access level is view-only.');const arr=list(e,c);
+ if(a==='add')form(e,c);else if(a==='edit')form(e,c,arr.find(r=>r.id===i));
+ else if(a==='del'){ask('Delete this record? This cannot be undone.','Delete').then(ok=>{if(ok){const j=arr.findIndex(r=>r.id===i);if(j>=0)arr.splice(j,1);save();render()}})}});
+document.addEventListener('change',ev=>{const t=ev.target;if(t.dataset.f){F[t.dataset.f]=t.value;render()}
+ else if(t.dataset.pr){if(!canEdit()){render();return}const p=S.proj.concat(S.tasks).find(x=>x.id===t.dataset.pr);p.progress=+t.value;p.updated=stamp();if(p.progress>=100)p.status='Completed';else if(p.progress>0&&p.status==='Not started')p.status='In progress';save();render()}});
+$('#q').oninput=()=>render();
+$('#rate').onchange=ev=>{S.rate=+ev.target.value||0;save();render()};
+$('#rst').onclick=()=>{ask(`Reset ${S.year} data? ${S.year==='2025'?'It returns to the original workbook values.':'It will be cleared.'} Other years are kept.`,'Reset').then(ok=>{if(ok){const d=S.year==='2025'?clone(SEED):emptyYear();YK.forEach(k=>{S[k]=d[k]});save();render()}})};
+
+const SH={capex:['Capex Lines','Capex Transactions'],mpoa:['MPOA Lines','MPOA Transactions'],opex:['Opex Lines','Opex Transactions']};
+$('#exp').onclick=async()=>{stashTo(S);const Y=Object.keys(S.years).sort(),wb=XLSX.utils.book_new(),
+ add=(n,get,h)=>XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(Y.flatMap(y=>get(S.years[y]).map(({id,...r})=>({year:y,...r}))),{header:['year',...h]}),n);
+ CATS.forEach(c=>{add(SH[c][0],d=>d[c].lines,['code','name','budget']);add(SH[c][1],d=>d[c].tx,FLD.tx.map(f=>f[0]))});
+ add('KPI',d=>d.kpi,FLD.kpi.map(f=>f[0]));add('Projects',d=>d.proj,FLD.proj.map(f=>f[0]));add('Tasks',d=>d.tasks,FLD.task.map(f=>f[0]));
+ XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet([{usd_to_rm:S.rate,departments:S.depts.join(', ')}]),'Settings');
+ const data=XLSX.write(wb,{type:'array',bookType:'xlsx'}),fn='Digitalization_Dashboard_'+new Date().toISOString().slice(0,10)+'.xlsx';
+ try{const d=await claude.use('downloads');if(d)return await d.save({filename:fn,data})}catch(e){if(e&&e.code==='declined')return}
+ try{XLSX.writeFile(wb,fn)}catch(e){tell('Export is not available in this view.')}};
+$('#imp').onclick=()=>$('#fi').click();
+$('#yr').onchange=ev=>{stashTo(S);S.year=ev.target.value;YK.forEach(k=>{S[k]=S.years[S.year][k]});F={};persist();render()};
+$('#ny').onclick=()=>{const nx=Math.max(...Object.keys(S.years).map(Number).filter(Boolean))+1;
+ $('#fm').innerHTML=`<h2>Start a new year</h2><label>Year<input name="y" type="number" min="2000" max="2100" value="${nx}" required></label><label>Carry forward from ${S.year}<select name="cf"><option value="1">Budget lines, KPI targets and open projects/tasks</option><option value="0">Nothing (blank year)</option></select></label><p class="k" style="margin:0">Transactions and actuals are never copied. ${S.year} data stays saved and can be viewed from the Year selector.</p><div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="cx">Cancel</button><button class="p">Create year</button></div>`;
+ $('#md').style.display='flex';$('#cx').onclick=()=>{$('#md').style.display='none'};
+ $('#fm').onsubmit=ev=>{ev.preventDefault();const d=Object.fromEntries(new FormData($('#fm'))),y=String(parseInt(d.y));if(y==='NaN')return;stashTo(S);
+  if(!S.years[y]){const src=S.years[S.year],n=emptyYear(),cp=o=>{const x={...clone(o),id:uid()};delete x.updated;return x},open=a=>a.filter(p=>!['Completed','Cancelled'].includes(p.status)).map(cp);
+   if(d.cf==='1'){CATS.forEach(c=>{n[c].lines=src[c].lines.map(cp)});n.kpi=src.kpi.map(k=>({...cp(k),actual:''}));n.proj=open(src.proj);n.tasks=open(src.tasks)}
+   S.years[y]=n}
+  S.year=y;YK.forEach(k=>{S[k]=S.years[y][k]});F={};persist();$('#md').style.display='none';render()}};
+$('#fi').onchange=ev=>{const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{
+ stashTo(S);let N=clone(S);
+ if(f.name.endsWith('.json')){N=JSON.parse(r.result);N.year=N.year||S.year}
+ else{const wb=XLSX.read(r.result,{type:'array',cellDates:true}),rows=n=>wb.Sheets[n]?XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:''}).map(o=>{for(const k in o)if(o[k] instanceof Date)o[k]=o[k].toISOString().slice(0,10);return{id:uid(),...o}}):null;
+  let hit=0;const put=(n,fn)=>{const R=rows(n);if(!R)return;hit++;const g={};R.forEach(o=>{const y=String(o.year||N.year).trim();delete o.year;(g[y]=g[y]||[]).push(o)});Object.entries(g).forEach(([y,a])=>{N.years[y]=N.years[y]||emptyYear();fn(N.years[y],a)})};
+  CATS.forEach(c=>{put(SH[c][0],(d,a)=>{d[c].lines=a});put(SH[c][1],(d,a)=>{d[c].tx=a})});put('KPI',(d,a)=>{d.kpi=a});put('Projects',(d,a)=>{d.proj=a});put('Tasks',(d,a)=>{d.tasks=a});
+  const s=rows('Settings');if(s&&s[0]&&s[0].usd_to_rm)N.rate=+s[0].usd_to_rm;if(s&&s[0]&&s[0].departments)N.depts=String(s[0].departments).split(',').map(x=>x.trim()).filter(Boolean);
+  if(!hit)throw new Error('No matching sheets found. Use an Export file as the template.')}
+ ask('Import will replace the matching data sets for the years in the file. Other years are kept. Continue?','Import').then(ok=>{if(ok){N.depts=N.depts||[];initS(N);S=N;save();render()}})}catch(e){tell('Import failed: '+e.message)}ev.target.value=''};r.readAsArrayBuffer(f)};
+let TH='dark';try{TH=localStorage.getItem('digi-theme')||'dark'}catch(e){}
+const applyTh=()=>{document.documentElement.dataset.theme=TH;$('#th').textContent=TH==='dark'?'☀ Light mode':'☾ Dark mode'};
+$('#th').onclick=()=>{TH=TH==='dark'?'light':'dark';try{localStorage.setItem('digi-theme',TH)}catch(e){}applyTh();render()};
+applyTh();
+stashTo(S);if(applyPatches(S))save();
+authInit();
+</script></body></html>
